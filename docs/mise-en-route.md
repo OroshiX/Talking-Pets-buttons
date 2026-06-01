@@ -1,18 +1,19 @@
 # Mise en route
 
-## 1. Preparer Arduino IDE
+## 1. Preparer PlatformIO
 
-Installer:
+Dans CLion ou VS Code:
 
-- Arduino IDE 2.x;
-- package de carte `Arduino Mbed OS GIGA Boards`;
-- bibliothèque `Arduino_AdvancedAnalog`;
-- bibliothèque `Arduino_USBHostMbed5`.
+- ouvrir le dossier du projet;
+- laisser PlatformIO charger `platformio.ini`;
+- verifier que l'environnement est `giga_r1_m7`;
+- lancer `pio run` ou l'action Build de l'IDE.
 
-Dans l'IDE, sélectionner:
+Les bibliothèques `Arduino_AdvancedAnalog` et `Arduino_USBHostMbed5` sont
+déclarées dans `platformio.ini`, donc PlatformIO les installe automatiquement.
 
-- carte: `Arduino GIGA R1 WiFi`;
-- port: le port série du GIGA.
+Pour téléverser, brancher le GIGA en USB-C puis lancer l'action Upload de
+PlatformIO.
 
 ## 2. Preparer la cle USB
 
@@ -44,7 +45,7 @@ ffmpeg -i source.wav -ac 1 -ar 16000 -sample_fmt s16 MANGER.WAV
 1. Brancher un interrupteur entre `D2` et `GND`.
 2. Brancher la cle USB dans le port USB-A du GIGA.
 3. Brancher l'enceinte amplifiee au jack 3,5 mm du GIGA.
-4. Téléverser `talking_pet_buttons/talking_pet_buttons.ino`.
+4. Téléverser le projet PlatformIO depuis `src/main.cpp`.
 5. Ouvrir le moniteur série a `115200` bauds.
 6. Appuyer sur le bouton: le moniteur doit afficher `Pressed: manger`.
 

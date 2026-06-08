@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-labelledby="title desc">
+  <title id="title">Construction d'un bouton DIY pour animal</title>
+  <desc id="desc">Schéma mécanique montrant une plaque d'appui, un tampon, un microrupteur à levier, le boîtier, le câble deux fils et les patins antidérapants.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #334155; stroke-width: 3; rx: 18; }
+      .cut { fill: #f1f5f9; stroke: #334155; stroke-width: 3; rx: 12; }
+      .plate { fill: #bfdbfe; stroke: #1d4ed8; stroke-width: 3; rx: 12; }
+      .foam { fill: #d9f99d; stroke: #65a30d; stroke-width: 3; rx: 8; }
+      .switch-body { fill: #e5e7eb; stroke: #111827; stroke-width: 3; rx: 8; }
+      .lever { stroke: #111827; stroke-width: 8; stroke-linecap: round; fill: none; }
+      .wire-signal { stroke: #2563eb; stroke-width: 7; fill: none; stroke-linecap: round; }
+      .wire-gnd { stroke: #111827; stroke-width: 7; fill: none; stroke-linecap: round; }
+      .cable { stroke: #64748b; stroke-width: 18; fill: none; stroke-linecap: round; }
+      .label { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .text { font: 22px Arial, sans-serif; fill: #0f172a; }
+      .small { font: 18px Arial, sans-serif; fill: #475569; }
+      .callout { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .note { fill: #eef2ff; stroke: #4f46e5; stroke-width: 2; rx: 14; }
+      .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 14; }
+      .warn { fill: #fff7ed; stroke: #f97316; stroke-width: 2; rx: 14; }
+      .screw { fill: #94a3b8; stroke: #334155; stroke-width: 2; }
+      .rubber { fill: #111827; stroke: #111827; stroke-width: 2; rx: 8; }
+      .weight { fill: #cbd5e1; stroke: #64748b; stroke-width: 2; rx: 6; }
+      .terminal { fill: #ffffff; stroke: #0f172a; stroke-width: 3; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="980"/>
+  <text x="60" y="70" class="label">Bouton DIY - coupe de côté + vue intérieure</text>
+  <text x="60" y="110" class="small">Objectif: une grande surface facile à pousser, qui appuie doucement sur le levier du microrupteur.</text>
+
+  <!-- Side cutaway -->
+  <rect x="60" y="155" width="780" height="640" class="panel"/>
+  <text x="95" y="205" class="label">Coupe de côté</text>
+
+  <rect x="165" y="300" width="560" height="70" class="plate"/>
+  <text x="315" y="344" class="text">Plaque d'appui 8 à 12 cm</text>
+
+  <rect x="440" y="385" width="82" height="48" class="foam"/>
+  <text x="435" y="462" class="small">tampon souple</text>
+
+  <rect x="170" y="510" width="540" height="150" class="cut"/>
+  <text x="210" y="645" class="small">boîtier bas et stable</text>
+
+  <rect x="360" y="558" width="165" height="62" class="switch-body"/>
+  <text x="382" y="596" class="small">MS12L</text>
+  <path d="M520 565 L655 505" class="lever"/>
+  <circle cx="655" cy="505" r="9" fill="#111827"/>
+  <path d="M480 433 L655 505" stroke="#65a30d" stroke-width="5" stroke-dasharray="10 8" fill="none"/>
+  <text x="575" y="475" class="small">zone d'appui</text>
+
+  <circle cx="380" cy="620" r="9" class="screw"/>
+  <circle cx="505" cy="620" r="9" class="screw"/>
+  <rect x="215" y="672" width="120" height="28" class="rubber"/>
+  <rect x="545" y="672" width="120" height="28" class="rubber"/>
+  <rect x="345" y="672" width="190" height="25" class="weight"/>
+  <text x="350" y="735" class="small">poids + patins antidérapants</text>
+
+  <path d="M525 590 C620 590 705 585 760 590" class="cable"/>
+  <path d="M525 580 C625 575 705 575 760 580" class="wire-signal"/>
+  <path d="M525 604 C625 610 705 610 760 604" class="wire-gnd"/>
+  <rect x="688" y="560" width="42" height="60" fill="#f8fafc" stroke="#334155" stroke-width="3" rx="8"/>
+  <text x="610" y="548" class="small">passe-fil / serre-câble</text>
+
+  <path d="M230 300 C190 260 170 238 135 232" class="callout"/>
+  <text x="95" y="255" class="small">plaque large: patte de chat</text>
+  <path d="M470 385 C455 330 500 280 590 255" class="callout"/>
+  <text x="590" y="260" class="small">tampon: appui plus doux</text>
+  <path d="M655 505 C715 485 720 455 755 430" class="callout"/>
+  <text x="595" y="405" class="small">levier = moins de force</text>
+
+  <!-- Inside/top view -->
+  <rect x="890" y="155" width="450" height="390" class="panel"/>
+  <text x="925" y="205" class="label">Vue intérieure</text>
+  <text x="925" y="240" class="small">Plaque retirée, on voit le câblage.</text>
+
+  <rect x="970" y="285" width="285" height="190" class="cut"/>
+  <text x="1030" y="455" class="small">fond du boîtier</text>
+
+  <rect x="1040" y="330" width="150" height="58" class="switch-body"/>
+  <path d="M1190 337 L1260 305" class="lever"/>
+  <circle cx="1260" cy="305" r="7" fill="#111827"/>
+  <circle cx="1062" cy="405" r="10" class="terminal"/>
+  <circle cx="1122" cy="405" r="10" class="terminal"/>
+  <circle cx="1182" cy="405" r="10" class="terminal"/>
+  <text x="1044" y="430" class="small">COM</text>
+  <text x="1112" y="430" class="small">NO</text>
+  <text x="1172" y="430" class="small">NC</text>
+
+  <path d="M1062 405 C1010 500 935 510 910 575" class="wire-signal"/>
+  <path d="M1122 405 C1065 515 965 535 910 625" class="wire-gnd"/>
+  <path d="M1182 405 C1235 455 1270 470 1300 500" stroke="#dc2626" stroke-width="5" stroke-dasharray="12 8" fill="none"/>
+  <text x="1197" y="506" class="small" fill="#dc2626">NC inutilisé</text>
+
+  <path d="M910 575 C875 590 875 610 910 625" class="cable"/>
+  <text x="950" y="575" class="small" fill="#2563eb">fil signal vers D2</text>
+  <text x="950" y="625" class="small">fil retour vers GND</text>
+
+  <circle cx="995" cy="310" r="10" class="screw"/>
+  <circle cx="1230" cy="450" r="10" class="screw"/>
+
+  <!-- Construction notes -->
+  <rect x="890" y="585" width="450" height="210" class="note"/>
+  <text x="925" y="630" class="label">Points clés</text>
+  <text x="925" y="675" class="text">1. COM + NO uniquement</text>
+  <text x="925" y="710" class="text">2. Le levier doit être sous le tampon</text>
+  <text x="925" y="745" class="text">3. Le câble doit être bloqué mécaniquement</text>
+  <text x="925" y="780" class="text">4. La base doit être lourde ou antidérapante</text>
+
+  <!-- Bottom sequence -->
+  <rect x="60" y="835" width="1280" height="95" class="ok"/>
+  <text x="95" y="872" class="text">Séquence mécanique: patte -> plaque d'appui -> tampon -> levier MS12L -> contact COM/NO fermé.</text>
+  <text x="95" y="908" class="text">Résultat électrique: le signal passe à LOW sur Arduino.</text>
+  <text x="685" y="908" class="small">Garde un petit jeu au repos, puis ajuste la hauteur du tampon.</text>
+</svg>

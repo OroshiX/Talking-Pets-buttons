@@ -48,6 +48,8 @@ Il ne faut pas ajouter de 5 V dans ce circuit.
 
 Structure simple:
 
+![Construction d'un bouton DIY](images/09-bouton-diy-construction.svg)
+
 1. Base lourde ou antidérapante.
 2. Microrupteur MS12L fixe dans la base.
 3. Grande plaque d'appui de 8 a 12 cm au-dessus du levier.

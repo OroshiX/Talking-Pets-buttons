@@ -19,8 +19,8 @@
   </defs>
   <rect class="bg" width="1200" height="720"/>
 
-  <text x="60" y="70" class="label">Etape 1 - Bouton normalement ouvert</text>
-  <text x="60" y="108" class="small">Le bouton ne recoit pas d'alimentation. Il relie simplement D2 a GND quand on appuie.</text>
+  <text x="60" y="70" class="label">Étape 1 - Bouton normalement ouvert</text>
+  <text x="60" y="108" class="small">Le bouton ne reçoit pas d'alimentation. Il relie simplement D2 a GND quand on appuie.</text>
 
   <rect x="70" y="170" width="340" height="370" class="panel"/>
   <text x="115" y="220" class="label">Arduino GIGA</text>

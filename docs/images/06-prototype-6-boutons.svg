@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Etape 7 - Prototype 6 boutons</title>
+  <desc id="desc">Schema montrant six boutons branches sur D2 a D7 avec rail GND commun.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .box { fill: #ffffff; stroke: #334155; stroke-width: 3; rx: 18; }
+      .rail { fill: #e5e7eb; stroke: #111827; stroke-width: 3; rx: 10; }
+      .label { font: 700 28px Arial, sans-serif; fill: #0f172a; }
+      .text { font: 21px Arial, sans-serif; fill: #0f172a; }
+      .small { font: 17px Arial, sans-serif; fill: #475569; }
+      .wire-signal { stroke: #2563eb; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .wire-gnd { stroke: #111827; stroke-width: 5; fill: none; stroke-linecap: round; }
+      .note { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 14; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="820"/>
+  <text x="60" y="70" class="label">Etape 7 - Prototype 6 boutons</text>
+  <text x="60" y="108" class="small">Chaque bouton a son signal. Tous les retours peuvent partager le meme GND.</text>
+
+  <rect x="70" y="150" width="300" height="520" class="box"/>
+  <text x="130" y="200" class="label">Boutons</text>
+
+  <g class="text">
+    <text x="110" y="255">B01 manger</text>
+    <text x="110" y="315">B02 eau</text>
+    <text x="110" y="375">B03 jouer</text>
+    <text x="110" y="435">B04 dehors</text>
+    <text x="110" y="495">B05 dedans</text>
+    <text x="110" y="555">B06 calin</text>
+  </g>
+
+  <rect x="515" y="130" width="360" height="560" class="box"/>
+  <text x="595" y="180" class="label">Boite centrale</text>
+  <text x="560" y="225" class="small">Arduino GIGA / borniers</text>
+
+  <g class="text">
+    <text x="590" y="270">D2</text>
+    <text x="590" y="330">D3</text>
+    <text x="590" y="390">D4</text>
+    <text x="590" y="450">D5</text>
+    <text x="590" y="510">D6</text>
+    <text x="590" y="570">D7</text>
+  </g>
+
+  <rect x="680" y="245" width="90" height="350" class="rail"/>
+  <text x="700" y="430" class="text">GND</text>
+
+  <path d="M250 248 H590" class="wire-signal"/>
+  <path d="M250 308 H590" class="wire-signal"/>
+  <path d="M250 368 H590" class="wire-signal"/>
+  <path d="M250 428 H590" class="wire-signal"/>
+  <path d="M250 488 H590" class="wire-signal"/>
+  <path d="M250 548 H590" class="wire-signal"/>
+
+  <path d="M300 260 H680" class="wire-gnd"/>
+  <path d="M300 320 H680" class="wire-gnd"/>
+  <path d="M300 380 H680" class="wire-gnd"/>
+  <path d="M300 440 H680" class="wire-gnd"/>
+  <path d="M300 500 H680" class="wire-gnd"/>
+  <path d="M300 560 H680" class="wire-gnd"/>
+
+  <rect x="925" y="240" width="190" height="130" class="box"/>
+  <text x="970" y="292" class="label">Cle USB</text>
+  <text x="965" y="328" class="small">WAV files</text>
+
+  <rect x="925" y="450" width="190" height="130" class="box"/>
+  <text x="955" y="502" class="label">Enceinte</text>
+  <text x="965" y="538" class="small">AUX</text>
+
+  <path d="M875 305 H925" stroke="#7c3aed" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M875 515 H925" stroke="#16a34a" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <rect x="100" y="720" width="1000" height="66" class="note"/>
+  <text x="132" y="760" class="text">A ne pas faire: relier deux signaux ensemble. Chaque bouton garde sa propre entree D2..D7.</text>
+</svg>

@@ -7,8 +7,10 @@ son correspondant sur une enceinte amplifiee.
 ## Contenu
 
 - `src/main.cpp`: sketch PlatformIO/Arduino pour 24 boutons.
-- `docs/cablage.md`: schema de cablage et logique electrique.
-- `docs/liste-achats.md`: composants recommandes avec liens France/UE.
+- `docs/cablage.md`: schema de câblage et logique électrique.
+- `docs/schemas-branchement.md`: schemas progressifs et subtilités du montage.
+- `docs/images/`: images SVG des branchements principaux.
+- `docs/liste-achats.md`: composants recommandés avec liens France/UE.
 - `docs/mise-en-route.md`: configuration PlatformIO, cle USB et premiers tests.
 - `docs/tests.md`: checklist de validation avant de construire 24 boutons.
 - `audio/README.md`: format et noms des fichiers WAV.

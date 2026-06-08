@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Etape 1 - Un bouton simple entre D2 et GND</title>
+  <desc id="desc">Schema montrant un microrupteur normalement ouvert branche entre D2 et GND sur Arduino GIGA.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #334155; stroke-width: 3; rx: 18; }
+      .label { font: 700 28px Arial, sans-serif; fill: #0f172a; }
+      .text { font: 22px Arial, sans-serif; fill: #0f172a; }
+      .small { font: 18px Arial, sans-serif; fill: #475569; }
+      .pin { fill: #e2e8f0; stroke: #334155; stroke-width: 2; }
+      .wire-signal { stroke: #2563eb; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .wire-gnd { stroke: #111827; stroke-width: 8; fill: none; stroke-linecap: round; }
+      .danger { fill: #fee2e2; stroke: #dc2626; stroke-width: 2; }
+      .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+      .terminal { fill: #ffffff; stroke: #0f172a; stroke-width: 3; }
+      .switch { stroke: #0f172a; stroke-width: 6; stroke-linecap: round; fill: none; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+
+  <text x="60" y="70" class="label">Etape 1 - Bouton normalement ouvert</text>
+  <text x="60" y="108" class="small">Le bouton ne recoit pas d'alimentation. Il relie simplement D2 a GND quand on appuie.</text>
+
+  <rect x="70" y="170" width="340" height="370" class="panel"/>
+  <text x="115" y="220" class="label">Arduino GIGA</text>
+  <rect x="120" y="275" width="100" height="52" class="pin"/>
+  <text x="147" y="309" class="text">D2</text>
+  <rect x="120" y="395" width="100" height="52" class="pin"/>
+  <text x="140" y="429" class="text">GND</text>
+  <rect x="120" y="495" width="100" height="40" class="danger"/>
+  <text x="142" y="522" class="small">5V non</text>
+
+  <rect x="760" y="190" width="330" height="330" class="panel"/>
+  <text x="825" y="240" class="label">Bouton DIY</text>
+  <text x="820" y="280" class="small">Microrupteur MS12L</text>
+
+  <circle cx="810" cy="330" r="14" class="terminal"/>
+  <circle cx="1010" cy="330" r="14" class="terminal"/>
+  <path d="M824 330 L950 280" class="switch"/>
+  <text x="785" y="370" class="text">COM</text>
+  <text x="990" y="370" class="text">NO</text>
+  <text x="835" y="440" class="ok text">Repos: ouvert</text>
+
+  <path d="M220 301 H810" class="wire-signal"/>
+  <path d="M220 421 H1010" class="wire-gnd"/>
+  <text x="440" y="285" class="text" fill="#2563eb">fil signal</text>
+  <text x="450" y="455" class="text">fil retour GND</text>
+
+  <rect x="95" y="590" width="1010" height="70" class="ok"/>
+  <text x="130" y="635" class="text">Regle: COM vers une entree Arduino, NO vers GND. Ne pas utiliser NC pour ce sketch.</text>
+</svg>

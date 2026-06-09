@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">Comment empêcher la plaque d'appui de glisser</title>
+  <desc id="desc">Trois solutions mécaniques pour maintenir la plaque d'un bouton DIY: charnière arrière, quatre guides verticaux, et cadre de retenue.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #334155; stroke-width: 3; rx: 18; }
+      .plate { fill: #bfdbfe; stroke: #1d4ed8; stroke-width: 3; rx: 12; }
+      .box { fill: #f1f5f9; stroke: #334155; stroke-width: 3; rx: 12; }
+      .switch { fill: #e5e7eb; stroke: #111827; stroke-width: 3; rx: 8; }
+      .lever { stroke: #111827; stroke-width: 7; stroke-linecap: round; fill: none; }
+      .rubber { fill: #111827; stroke: #111827; stroke-width: 2; rx: 8; }
+      .foam { fill: #d9f99d; stroke: #65a30d; stroke-width: 3; rx: 8; }
+      .hinge { fill: #fde68a; stroke: #b45309; stroke-width: 3; rx: 8; }
+      .guide { fill: #e0e7ff; stroke: #4f46e5; stroke-width: 3; rx: 8; }
+      .spring { stroke: #64748b; stroke-width: 4; fill: none; }
+      .label { font: 700 30px Arial, sans-serif; fill: #0f172a; }
+      .text { font: 22px Arial, sans-serif; fill: #0f172a; }
+      .small { font: 18px Arial, sans-serif; fill: #475569; }
+      .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; rx: 14; }
+      .note { fill: #eef2ff; stroke: #4f46e5; stroke-width: 2; rx: 14; }
+      .warn { fill: #fff7ed; stroke: #f97316; stroke-width: 2; rx: 14; }
+      .arrow { stroke: #475569; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .bad { stroke: #dc2626; stroke-width: 8; stroke-linecap: round; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="920"/>
+  <text x="60" y="70" class="label">Maintenir la plaque d'appui au bon endroit</text>
+  <text x="60" y="110" class="small">La plaque ne doit jamais être simplement posée: elle doit être captive, guidée, ou articulée.</text>
+
+  <!-- Option 1 -->
+  <rect x="60" y="160" width="400" height="590" class="panel"/>
+  <text x="95" y="210" class="label">Option A</text>
+  <text x="95" y="245" class="text">Charnière arrière</text>
+  <text x="95" y="275" class="small">Recommandé pour le prototype</text>
+
+  <rect x="120" y="535" width="280" height="90" class="box"/>
+  <rect x="51.017822" y="512.67755" width="240" height="45" class="plate" transform="rotate(-9.7336904)"/>
+  <rect x="122" y="488" width="52" height="60" class="hinge"/>
+  <text x="102" y="468" class="small">charnière</text>
+  <rect x="265" y="568" width="72" height="34" class="switch"/>
+  <path d="m 335,571 60,-30" class="lever"/>
+  <rect x="69.540962" y="628.3299" width="36" height="30" class="foam" transform="rotate(-27.262424)"/>
+  <path d="M 363.66314,459.27398 352.48158,411.76925" class="arrow"/>
+  <text x="277" y="394" class="small">tampon sur le levier</text>
+  <rect x="160" y="635" width="70" height="22" class="rubber"/>
+  <rect x="295" y="635" width="70" height="22" class="rubber"/>
+
+  <rect x="95" y="675" width="330" height="52" class="ok"/>
+  <text x="115" y="707" class="small">La plaque pivote: elle ne peut pas glisser.</text>
+
+  <!-- Option 2 -->
+  <rect x="500" y="160" width="400" height="590" class="panel"/>
+  <text x="535" y="210" class="label">Option B</text>
+  <text x="535" y="245" class="text">Guides verticaux</text>
+  <text x="535" y="275" class="small">Plus propre, plus délicat à fabriquer</text>
+
+  <rect x="565" y="535" width="270" height="90" class="box"/>
+  <rect x="590" y="475" width="220" height="45" class="plate"/>
+  <rect x="600" y="420" width="34" height="150" class="guide"/>
+  <rect x="766" y="420" width="34" height="150" class="guide"/>
+  <path d="M620 520 c-18 18 18 18 0 36 c-18 18 18 18 0 36" class="spring"/>
+  <path d="M783 520 c-18 18 18 18 0 36 c-18 18 18 18 0 36" class="spring"/>
+  <rect x="680" y="564" width="72" height="34" class="switch"/>
+  <path d="m 750,568 75,-36" class="lever"/>
+  <rect x="477.52347" y="807.19806" width="34" height="28" class="foam" transform="rotate(-25.882473)"/>
+  <path d="M 700,470 V 390" class="arrow"/>
+  <text x="575" y="370" class="small">la plaque monte/descend sans tourner</text>
+  <rect x="610" y="635" width="70" height="22" class="rubber"/>
+  <rect x="745" y="635" width="70" height="22" class="rubber"/>
+
+  <rect x="535" y="675" width="330" height="52" class="note"/>
+  <text x="555" y="707" class="small">2 ou 4 tiges, trous légèrement larges.</text>
+
+  <!-- Option 3 -->
+  <rect x="940" y="160" width="400" height="590" class="panel"/>
+  <text x="975" y="210" class="label">Option C</text>
+  <text x="975" y="245" class="text">Cadre de retenue</text>
+  <text x="975" y="275" class="small">Simple si tu as une boîte adaptée</text>
+
+  <rect x="1005" y="535" width="270" height="90" class="box"/>
+  <rect x="1018" y="452" width="244" height="92" fill="none" stroke="#4f46e5" stroke-width="8" rx="14"/>
+  <rect x="1040" y="475" width="200" height="45" class="plate"/>
+  <rect x="1120" y="564" width="72" height="34" class="switch"/>
+  <path d="m 1190,568 70,-32" class="lever"/>
+  <rect x="905.72662" y="968.32361" width="34" height="28" class="foam" transform="rotate(-23.727226)"/>
+  <path d="M1030 450 H1250" class="arrow"/>
+  <text x="1000" y="425" class="small">rebord/cadre qui empêche la fuite latérale</text>
+  <rect x="1050" y="635" width="70" height="22" class="rubber"/>
+  <rect x="1185" y="635" width="70" height="22" class="rubber"/>
+
+  <rect x="975" y="675" width="330" height="52" class="warn"/>
+  <text x="995" y="707" class="small">Petit jeu: éviter les frottements forts.</text>
+
+  <!-- Bad loose plate -->
+  <rect x="180" y="805" width="1040" height="70" class="warn"/>
+  <text x="220" y="848" class="text">À éviter: plaque libre simplement posée. Elle peut tourner, glisser ou rester appuyée.</text>
+  <line x1="1090" y1="818" x2="1145" y2="862" class="bad"/>
+  <line x1="1145" y1="818" x2="1090" y2="862" class="bad"/>
+</svg>

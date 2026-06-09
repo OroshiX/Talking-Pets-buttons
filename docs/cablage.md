@@ -56,6 +56,29 @@ Structure simple:
 4. Deux fils soudes sur `COM` et `NO`.
 5. Sortie de cable protegee par passe-fil, serre-cable ou noeud interne.
 
+### Empêcher la plaque d'appui de glisser
+
+La plaque ne doit pas être simplement posée sur le boîtier. Elle doit être
+maintenue mécaniquement pour rester au-dessus du levier du microrupteur.
+
+![Guidage de la plaque d'appui](images/10-guidage-plaque-appui.svg)
+
+Option recommandée pour le premier prototype: une petite charnière à l'arrière
+du boîtier. La plaque pivote comme un couvercle, donc elle reste alignée avec le
+levier. Un petit tampon souple sous la plaque appuie sur le levier du MS12L.
+
+Autres options:
+
+- guides verticaux: deux ou quatre tiges empêchent la plaque de partir sur les
+  côtés, mais il faut éviter les frottements;
+- cadre de retenue: un rebord autour de la plaque l'empêche de glisser hors du
+  boîtier;
+- ressorts ou mousse de rappel: utiles pour aider la plaque à revenir en haut,
+  mais ils ne doivent pas rendre l'appui trop dur.
+
+Point important: garde un petit jeu au repos. La plaque ne doit pas appuyer en
+permanence sur le levier; elle doit seulement le toucher quand l'animal appuie.
+
 ## Boite centrale
 
 Option simple pour commencer:

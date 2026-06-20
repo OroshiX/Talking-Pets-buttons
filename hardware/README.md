@@ -14,7 +14,7 @@ centrale reste dégagée sous le haut-parleur.
 python3 hardware/generate_button_riser_stl.py
 ```
 
-Orientation:
+Orientation :
 
 - la petite flèche en relief pointe vers le micro ;
 - le grand évent latéral doit aussi être orienté vers le micro ;

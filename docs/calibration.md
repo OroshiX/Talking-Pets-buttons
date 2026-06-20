@@ -1,19 +1,19 @@
 # Calibration audio
 
-La calibration cree un template moyen pour chaque bouton. Le firmware compare
-ensuite chaque nouveau son a ces templates.
+La calibration crée un template moyen pour chaque bouton. Le firmware compare
+ensuite chaque nouveau son à ces templates.
 
-## Preparation
+## Préparation
 
-Avant de calibrer:
+Avant de calibrer :
 
-- mettre les boutons a leur place finale;
-- placer le micro a sa hauteur finale;
-- activer le hotspot Android;
-- brancher la cle USB;
-- ouvrir le moniteur serie a `115200` bauds.
+- mettre les boutons à leur place finale ;
+- placer le micro à sa hauteur finale ;
+- activer le hotspot Android ;
+- brancher la clé USB ;
+- ouvrir le moniteur série à `115200` bauds.
 
-Verifier:
+Vérifier :
 
 ```text
 status
@@ -22,7 +22,7 @@ list
 
 ## Calibrer un bouton
 
-Commande:
+Commande :
 
 ```text
 cal A1 12
@@ -31,7 +31,7 @@ cal A1 12
 Puis presser le bouton A1 12 fois. Attendre que le message audio soit fini avant
 la pression suivante.
 
-Le firmware affiche:
+Le firmware affiche :
 
 ```text
 Calibration A1: 1/12
@@ -40,7 +40,7 @@ Calibration A1: 2/12
 Calibration complete.
 ```
 
-Le fichier cree:
+Le fichier créé :
 
 ```text
 /templates/A1.tpl
@@ -57,7 +57,7 @@ cal B1 12
 cal B2 12
 ```
 
-Pour 8 boutons, ajouter:
+Pour 8 boutons, ajouter :
 
 ```text
 cal B3 12
@@ -66,17 +66,17 @@ cal B4 12
 
 ## Quand refaire une calibration
 
-Refaire le template si:
+Refaire le template si :
 
-- le message du bouton est reenregistre;
-- le bouton change de support;
-- le micro change fortement de position;
-- la piece de vacances est beaucoup plus reverberante ou bruyante;
+- le message du bouton est réenregistré ;
+- le bouton change de support ;
+- le micro change fortement de position ;
+- la pièce de vacances est beaucoup plus réverbérante ou bruyante ;
 - deux boutons sont souvent confondus.
 
-## Reglages utiles
+## Réglages utiles
 
-Dans `/config/settings.ini`:
+Dans `/config/settings.ini` :
 
 ```ini
 confidence_threshold=0.75
@@ -85,15 +85,15 @@ min_trigger_abs=650
 trigger_multiplier=4.0
 ```
 
-Si le GIGA reconnait trop facilement des bruits:
+Si le GIGA reconnaît trop facilement des bruits :
 
-- monter `confidence_threshold`;
-- monter `trigger_multiplier`;
+- monter `confidence_threshold` ;
+- monter `trigger_multiplier` ;
 - monter `min_trigger_abs`.
 
-Si le GIGA rate des vrais boutons:
+Si le GIGA rate des vrais boutons :
 
-- rapprocher le micro;
-- augmenter le gain du micro;
-- baisser legerement `min_trigger_abs`;
+- rapprocher le micro ;
+- augmenter le gain du micro ;
+- baisser légèrement `min_trigger_abs` ;
 - refaire la calibration avec le placement final.

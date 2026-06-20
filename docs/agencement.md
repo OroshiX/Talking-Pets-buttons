@@ -7,9 +7,9 @@
 ```text
 Mur / zone hors passage animal
 
-        [Boitier GIGA]
+        [Boîtier GIGA]
              |
-        mat micro 25-35 cm haut
+        mât micro 25-35 cm haut
              v
         micro pointe vers centre des boutons
 
@@ -22,17 +22,17 @@ Mur / zone hors passage animal
 |                    |                    |
 +--------------------+--------------------+
 
-Animal arrive plutot par le bas / cote ouvert.
+Animal arrive plutôt par le bas / côté ouvert.
 ```
 
 ## Positions recommandées
 
-- Boitier GIGA : derriere les tiles, hors zone de pattes.
-- Micro: environ 20 cm derriere le bord arriere des tiles.
-- Hauteur micro: 25 a 35 cm au-dessus du sol.
-- Orientation micro : pointe vers le centre géométrique des boutons.
-- Distance micro-boutons: 35 a 80 cm si possible, moins de 1 m en V1.
-- Boutons : 8 à 12 cm d'espace entre eux.
+- Boîtier GIGA : derrière les tiles, hors zone de pattes.
+- Micro : environ 20 cm derrière le bord arrière des tiles.
+- Hauteur micro : 25 à 35 cm au-dessus du sol.
+- Orientation micro : pointe vers le centre géométrique des boutons.
+- Distance micro-boutons : 35 à 80 cm si possible, moins de 1 m en V1.
+- Boutons : 8 à 12 cm d'espace entre eux.
 
 ## Orientation des boutons
 
@@ -55,13 +55,13 @@ Micro
 
 ## Routine de voyage
 
-Pour déplacer le setup :
+Pour déplacer le setup :
 
-1. laisser les boutons dans leurs supports ;
-2. empiler les tiles ;
-3. garder le micro fixe au boitier ou a un petit mat pliable ;
-4. brancher le GIGA a une batterie externe ;
-5. activer le hotspot Android;
+1. laisser les boutons dans leurs supports ;
+2. empiler les tiles ;
+3. garder le micro fixe au boîtier ou à un petit mât pliable ;
+4. brancher le GIGA à une batterie externe ;
+5. activer le hotspot Android ;
 6. attendre `Wi-Fi connected` et `NTP synced` dans le moniteur série si tu
    vérifies depuis l'ordinateur.
 

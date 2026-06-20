@@ -1,4 +1,4 @@
-# Cle USB
+# Clé USB
 
 ## Structure
 
@@ -15,7 +15,7 @@
 ```
 
 Le firmware crée les dossiers manquants au démarrage, mais il est plus simple de
-copier la structure du dossier `usb/` du depot.
+copier la structure du dossier `usb/` du dépôt.
 
 ## `/config/buttons.csv`
 
@@ -26,12 +26,12 @@ A2,eau,Eau
 A3,jouer,Jouer
 A4,dehors,Dehors
 B1,dedans,Dedans
-B2,calin,Calin
+B2,calin,Câlin
 ```
 
-- `slot`: position physique sur les tiles.
-- `word`: identifiant court dans les logs.
-- `ntfy_label`: texte humain dans les notifications.
+- `slot` : position physique sur les tiles.
+- `word` : identifiant court dans les logs.
+- `ntfy_label` : texte humain dans les notifications.
 
 ## `/config/secrets.ini`
 
@@ -47,7 +47,8 @@ ntfy_tls=true
 timezone_offset_minutes=120
 ```
 
-Utiliser un topic `ntfy` long et non devinable. Ne pas commiter `secrets.ini`.
+Utiliser un topic `ntfy` long et difficile à deviner. Ne pas versionner
+`secrets.ini`.
 
 ## `/config/settings.ini`
 

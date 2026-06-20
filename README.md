@@ -29,11 +29,16 @@ dégagée, et les évents latéraux orientent le son vers le micro.
 - `usb/config/` : exemples de fichiers à copier sur la clé USB.
 - `hardware/button-riser.stl` : support 3D prêt pour PrusaSlicer.
 - `hardware/button-riser.scad` : source paramétrique OpenSCAD du support.
-- `docs/agencement.md` : placement des tiles, du GIGA, du micro et des boutons.
-- `docs/schemas-branchement.md` : branchements micro, USB, alimentation et flux.
-- `docs/calibration.md` : apprentissage des boutons avec les commandes série.
-- `docs/cle-usb.md` : structure de la clé USB et formats des fichiers.
-- `docs/tests.md` : checklist de validation avant usage quotidien.
+- `docs/01-mise-en-route.md` : démarrage, firmware, USB, placement et calibration.
+- `docs/02-liste-achats.md` : matériel recommandé pour la V1.
+- `docs/03-agencement.md` : placement des tiles, du GIGA, du micro et des boutons.
+- `docs/04-cablage.md` : câblage minimal du micro et de l'alimentation.
+- `docs/05-schemas-branchement.md` : branchements micro, USB, alimentation et flux.
+- `docs/06-cle-usb.md` : structure de la clé USB et formats des fichiers.
+- `docs/07-calibration.md` : apprentissage des boutons avec les commandes série.
+- `docs/08-tests.md` : checklist de validation avant usage quotidien.
+- `hardware/01-support-3d.md` : support imprimable et réglages PrusaSlicer.
+- `audio/01-audio.md` : notes sur les données audio utilisées par la V1.
 - `docs/images/` : schémas SVG exportables/imprimables.
 
 ## Matériel V1

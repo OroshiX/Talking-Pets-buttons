@@ -58,7 +58,7 @@ bon objectif.
 
 ## 4. Placer le setup
 
-Lire `docs/agencement.md`, puis installer :
+Lire `docs/03-agencement.md`, puis installer :
 
 - le GIGA derrière les tiles, hors zone de pattes ;
 - le micro à 25-35 cm de haut, pointé vers le centre des boutons ;
@@ -104,4 +104,4 @@ testntfy
 ```
 
 Puis presser chaque bouton 20 fois en conditions réelles. La checklist complète
-est dans `docs/tests.md`.
+est dans `docs/08-tests.md`.

@@ -1,48 +1,41 @@
 # Liste d'achat France / UE
 
 Les liens sont des exemples de composants compatibles. Il n'est pas obligatoire
-d'acheter exactement ces references, tant que les caractéristiques restent les
-memes.
+d'acheter exactement ces references si les caracteristiques restent les memes.
 
-## Prototype 6 boutons
+## Electronique principale
 
-- 6 x microrupteur a levier long basse force:
-  https://www.gotronic.fr/art-microrupteur-ms12l-4327.htm
-- 6 x boitier ou base pour bouton DIY:
-  https://www.gotronic.fr/art-boitier-pour-bp-urgence-40373.htm
-- Cable deux conducteurs:
-  https://www.gotronic.fr/art-bobine-de-cable-50-m-fc24rbl50-29804.htm
-- Shield a borniers Mega/GIGA:
-  https://www.gotronic.fr/art-shield-a-borniers-mega-dfr0921-35746.htm
-- Option connecteurs amovibles deux broches:
-  https://www.gotronic.fr/art-rallonge-jst-xh-2-cts-36136.htm
-- Condensateurs 100 nF si les cables longs déclenchent des faux appuis:
-  https://www.gotronic.fr/art-condensateur-ceramique-100-nf-40054.htm
-- Enceinte amplifiée AUX:
-  https://fr.creative.com/p/speakers/creative-pebble-v2
+- Arduino GIGA R1 WiFi:
+  https://store.arduino.cc/products/giga-r1-wifi
+- Module micro analogique a gain reglable, type MAX4466, compatible 3.3 V:
+  https://www.adafruit.com/product/1063
+- Cle USB-A courte, FAT32, 8 a 32 Go.
+- Batterie externe USB-C 5 V, ou chargeur USB-C stable.
+- Cable USB-C court pour alimenter le GIGA.
 
-## Passage a 24 boutons
+## Installation physique
 
-- 24 a 30 microrupteurs MS12L.
-- 24 a 30 boitiers/bases.
-- 50 m de cable deux conducteurs minimum, plus si les boutons sont disperses.
-- Un grand boitier central, par exemple:
-  https://www.gotronic.fr/art-boitier-abs-etanche-g373-6618.htm
-- Borniers, connecteurs ou petits dominos pour faire un rail `GND` propre.
-- Patins caoutchouc, velcro ou tapis antidérapant pour stabiliser les boutons.
+- 6 a 8 boutons enregistrables independants.
+- 2 tiles de yoga emboitables.
+- Fil Dupont femelle-femelle ou cable 3 conducteurs pour le micro.
+- Petite boite pour le GIGA.
+- Petit mat ou support orientable pour le micro.
+- Velcro adhesif, patins caoutchouc, double-face mousse fine.
+- Filament PLA/PETG pour les supports 3D.
 
-## Alimentation
+## Option bouton service
 
-- Arduino GIGA alimente par USB-C.
-- Enceinte amplifiée alimentée selon son modèle, souvent USB.
-- Éviter d'alimenter des modules externes depuis les GPIO.
+- 1 bouton poussoir normalement ouvert.
+- 2 fils vers `D22` et `GND`.
 
-## Option fallback audio
+## Application Android
 
-Si la lecture WAV sur le GIGA devient trop contraignante, ajouter un lecteur MP3
-dedie comme DFPlayer Mini:
+- Application `ntfy`.
+- Hotspot Android active pendant les sessions d'usage.
+- Topic prive long et non devinable dans `secrets.ini`.
 
-- Documentation officielle: https://wiki.dfrobot.com/dfr0299
+## A eviter
 
-Ce fallback demanderait un autre sketch, une carte microSD, et une liaison serie
-entre le GIGA et le module audio.
+- Micro USB: le firmware V1 attend un signal analogique sur `A0`.
+- Micro electret nu sans module d'amplification: le signal sera trop faible.
+- Alimentation du micro en 5 V si sa sortie peut depasser 3.3 V.

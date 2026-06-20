@@ -1,47 +1,114 @@
-# Tests
+# Plan de tests
 
-## Test électrique minimum
+## 1. Test micro
 
-- Multimètre en mode continuité.
-- Bouton relache: pas de continuité entre les deux fils.
-- Bouton appuye: continuité entre les deux fils.
-- Aucun fil du bouton ne doit etre relie au 5 V.
+Commande:
 
-## Test Arduino sans audio
+```text
+status
+```
 
-Brancher un bouton entre `D2` et `GND`, ouvrir le moniteur série, puis vérifier :
+Verifier:
 
-- un appui affiche `Pressed: manger`;
-- un appui long ne spamme pas le moniteur;
-- un relâchement puis nouvel appui retrigger correctement;
-- un cable remue ne crée pas de faux appuis.
+- `USB=mounted`;
+- `noise` stable au repos;
+- `threshold` superieur au bruit de fond;
+- un bouton presse declenche `Audio event started`.
 
-## Test audio
+Si rien ne declenche:
 
-- `MANGER.WAV` est present a la racine de la cle USB.
-- La cle est FAT32.
-- L'enceinte est allumée, amplifiée, et branchée en AUX.
-- Un appui sur `D2` joue le son.
+- augmenter le gain du micro;
+- rapprocher le micro;
+- baisser `min_trigger_abs` dans `/config/settings.ini`.
 
-## Test 6 boutons
+Si tout declenche:
 
-- Chaque pin de `D2` a `D7` joue le bon fichier.
-- Deux appuis rapides sont joues dans l'ordre quand la file n'est pas pleine.
-- Si un fichier manque, le moniteur serie affiche l'erreur mais le systeme garde
-  les autres boutons utilisables.
+- baisser le gain du micro;
+- augmenter `trigger_multiplier`;
+- eloigner le micro de la zone de passage.
 
-## Test mécanique avec l'animal
+## 2. Test acoustique du support
 
-- Le bouton ne glisse pas quand il est pousse lateralement.
-- La plaque d'appui est assez grande pour une patte.
-- L'appui se déclenche sans que le chat doive mettre tout son poids dessus.
-- Les fils ne sont pas attrayants ni accessibles a machouiller.
+Comparer chaque bouton dans deux configurations:
 
-## Si faux appuis
+1. pose directement sur la tile;
+2. pose dans le support imprime.
 
-Essayer dans cet ordre:
+Garder le support si:
 
-1. Raccourcir ou torsader les deux fils du bouton.
-2. Eloigner les cables des alimentations et moteurs.
-3. Ajouter un condensateur 100 nF entre l'entrée du bouton et `GND`.
-4. Augmenter `kDebounceMs` dans le sketch, par exemple de `35` a `60`.
+- le son est plus clair a l'oreille;
+- la confiance moyenne augmente;
+- les faux positifs ne montent pas.
+
+## 3. Calibration
+
+Pour chaque bouton:
+
+```text
+cal A1 12
+```
+
+Regles:
+
+- presser depuis la vraie position finale;
+- laisser le son finir entre deux pressions;
+- refaire la calibration si le message du bouton est reenregistre;
+- refaire la calibration si le micro change fortement de place.
+
+## 4. Precision
+
+Apres calibration:
+
+- presser chaque bouton 20 fois;
+- viser au moins 18 reconnaissances correctes sur 20 par bouton;
+- noter les boutons confondus.
+
+Si deux boutons sont confondus:
+
+- enregistrer des mots plus differents;
+- augmenter l'espace entre ces boutons;
+- refaire les templates;
+- baisser `match_distance_at_zero` ou augmenter `confidence_threshold`.
+
+## 5. Faux positifs
+
+Tester:
+
+- voix humaine proche;
+- television ou musique;
+- pas autour des tiles;
+- objet pose sur la tile;
+- bouton touche sans declencher son message.
+
+Attendu: pas de notification. Les evenements ambigus peuvent apparaitre dans
+`/logs/unsynced.csv` ou le log du jour avec `slot=unknown`.
+
+## 6. Portabilite
+
+Sequence:
+
+1. eteindre le GIGA;
+2. deplacer tiles, boutons, micro et boitier;
+3. rallumer sur batterie externe;
+4. activer le hotspot Android;
+5. verifier `status`;
+6. presser chaque bouton.
+
+Attendu:
+
+- le GIGA retrouve la cle USB;
+- l'heure NTP se synchronise;
+- les logs vont dans `/logs/YYYY-MM-DD.csv`;
+- les notifications arrivent sur Android.
+
+## 7. Offline
+
+Sequence:
+
+1. couper le hotspot;
+2. presser deux boutons connus;
+3. verifier que `/queue/ntfy-pending.jsonl` grossit;
+4. rallumer le hotspot;
+5. attendre 30 secondes.
+
+Attendu: les notifications en attente sont envoyees, puis la file est vide.

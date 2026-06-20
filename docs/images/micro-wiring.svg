@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-labelledby="title desc">
+  <title id="title">Branchement du micro analogique</title>
+  <desc id="desc">Le module micro se branche au 3V3, GND et A0 de l'Arduino GIGA.</desc>
+  <rect width="900" height="420" fill="#f7f4ef"/>
+  <rect x="80" y="90" width="260" height="210" rx="10" fill="#ffffff" stroke="#26312d" stroke-width="4"/>
+  <text x="210" y="130" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#26312d">Module micro</text>
+  <circle cx="210" cy="200" r="38" fill="#2f5d50"/>
+  <text x="210" y="207" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">MIC</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#26312d">
+    <text x="300" y="170">VCC</text>
+    <text x="300" y="215">OUT</text>
+    <text x="300" y="260">GND</text>
+  </g>
+  <rect x="560" y="70" width="260" height="250" rx="10" fill="#26312d"/>
+  <text x="690" y="112" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#ffffff">Arduino GIGA</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#ffffff">
+    <text x="590" y="170">3V3</text>
+    <text x="590" y="215">A0</text>
+    <text x="590" y="260">GND</text>
+  </g>
+  <line x1="340" y1="164" x2="560" y2="164" stroke="#c4473a" stroke-width="5"/>
+  <line x1="340" y1="209" x2="560" y2="209" stroke="#2f5d50" stroke-width="5"/>
+  <line x1="340" y1="254" x2="560" y2="254" stroke="#333333" stroke-width="5"/>
+  <text x="450" y="152" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#c4473a">3.3 V seulement</text>
+  <text x="450" y="198" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#2f5d50">signal audio</text>
+  <text x="450" y="292" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#26312d">Fils courts: objectif &lt; 30 cm</text>
+</svg>

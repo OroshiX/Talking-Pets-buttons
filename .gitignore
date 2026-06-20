@@ -1,2 +1,12 @@
 .pio
 .idea/
+docs/.DS_Store
+
+# USB runtime files
+usb/config/secrets.ini
+usb/templates/*.tpl
+usb/logs/*.csv
+usb/queue/*.jsonl
+usb/queue/*.tmp
+usb/captures/*
+!usb/captures/.gitkeep

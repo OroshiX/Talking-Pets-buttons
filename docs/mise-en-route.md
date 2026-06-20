@@ -1,64 +1,106 @@
 # Mise en route
 
-## 1. Preparer PlatformIO
+## 1. Preparer le firmware
 
-Dans CLion ou VS Code:
-
-- ouvrir le dossier du projet ;
-- laisser PlatformIO charger `platformio.ini` ;
-- verifier que l'environnement est `giga_r1_m7` ;
-- lancer `pio run` ou l'action Build de l'IDE.
-
-Les bibliothèques `Arduino_AdvancedAnalog` et `Arduino_USBHostMbed5` sont
-déclarées dans `platformio.ini`, donc PlatformIO les installe automatiquement.
-
-Pour téléverser, brancher le GIGA en USB-C puis lancer l'action Upload de
-PlatformIO.
-
-## 2. Préparer la clé USB
-
-- Formater la clé en FAT32.
-- Utiliser un schema de partition MBR si l'outil de formatage le propose.
-- Copier les fichiers WAV à la racine de la clé.
-- Utiliser les noms exacts attendus par le sketch, par exemple `MANGER.WAV`.
-
-Le sketch monte la cle sous `/usb`.
-
-## 3. Préparer les fichiers WAV
-
-Format attendu:
-
-- WAV;
-- PCM;
-- mono;
-- 16-bit;
-- 16000 Hz, 22050 Hz ou 44100 Hz.
-
-Avec `ffmpeg`, exemple:
+Dans CLion, VS Code ou un terminal PlatformIO:
 
 ```sh
-ffmpeg -i source.wav -ac 1 -ar 16000 -sample_fmt s16 MANGER.WAV
+pio run
+pio run --target upload
 ```
 
-## 4. Tester un bouton
+La cible attendue est `giga_r1_m7` dans `platformio.ini`.
 
-Lire d'abord `docs/schemas-branchement.md`, surtout les étapes 1 à 6.
+Ouvrir ensuite le moniteur serie a `115200` bauds. Au demarrage, le GIGA affiche
+la liste des commandes:
 
-1. Brancher un interrupteur entre `D2` et `GND`.
-2. Brancher la cle USB dans le port USB-A du GIGA.
-3. Brancher l'enceinte amplifiée au jack 3,5 mm du GIGA.
-4. Téléverser le projet PlatformIO depuis `src/main.cpp`.
-5. Ouvrir le moniteur série a `115200` bauds.
-6. Appuyer sur le bouton : le moniteur doit afficher `Pressed: manger`.
+```text
+help
+list
+status
+reload
+cal A1 12
+cancel
+testntfy
+```
 
-## 5. Étendre progressivement
+## 2. Preparer la cle USB
 
-Ordre recommande:
+Formater une cle USB-A en FAT32, puis copier la structure suivante:
 
-1. 1 bouton sur table.
-2. 1 bouton dans un vrai boitier.
-3. 6 boutons avec les premiers mots.
-4. 24 boutons apres validation mécanique.
+```text
+/config/buttons.csv
+/config/settings.ini
+/config/secrets.ini
+/templates/
+/logs/
+/queue/
+/captures/
+```
 
-Ne pas fabriquer 24 boitiers avant d'avoir validé force, stabilite, bruit du
-microrupteur, longueur des cables et volume audio.
+Les exemples du depot sont dans `usb/config/`.
+
+`secrets.ini` n'est pas versionne, car il contient le mot de passe hotspot et le
+topic `ntfy`.
+
+## 3. Brancher le micro
+
+```text
+Module micro analogique        Arduino GIGA
+
+VCC  ------------------------>  3V3
+GND  ------------------------>  GND
+OUT  ------------------------>  A0
+```
+
+Utiliser `3V3`, pas `5V`. Garder les fils du micro courts: 30 cm maximum est un
+bon objectif.
+
+## 4. Placer le setup
+
+Lire `docs/agencement.md`, puis installer:
+
+- le GIGA derriere les tiles, hors zone de pattes;
+- le micro a 25-35 cm de haut, pointe vers le centre des boutons;
+- les boutons dans leurs supports 3D, event sonore oriente vers le micro.
+
+## 5. Calibrer les boutons
+
+Pour chaque slot:
+
+```text
+cal A1 12
+```
+
+Presser ensuite le bouton A1 12 fois, depuis sa vraie position sur la tile.
+
+Repeter:
+
+```text
+cal A2 12
+cal A3 12
+cal A4 12
+cal B1 12
+cal B2 12
+```
+
+Le GIGA cree les fichiers:
+
+```text
+/templates/A1.tpl
+/templates/A2.tpl
+...
+```
+
+## 6. Tester
+
+Commandes utiles:
+
+```text
+status
+list
+testntfy
+```
+
+Puis presser chaque bouton 20 fois en conditions reelles. La checklist complete
+est dans `docs/tests.md`.

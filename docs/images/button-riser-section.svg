@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" role="img" aria-labelledby="title desc">
+  <title id="title">Coupe du support imprime</title>
+  <desc id="desc">Un bouton repose sur un support sureleve avec trou central et events lateraux.</desc>
+  <rect width="900" height="480" fill="#f7f4ef"/>
+  <rect x="150" y="340" width="600" height="48" rx="4" fill="#d9e8df" stroke="#5b7d6e" stroke-width="3"/>
+  <text x="450" y="371" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#26312d">tile yoga</text>
+  <path d="M 230 275 L 670 275 L 710 340 L 190 340 Z" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+  <rect x="390" y="292" width="120" height="48" fill="#f7f4ef" stroke="#8b4e39" stroke-width="3"/>
+  <text x="450" y="322" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#8b4e39">trou son</text>
+  <path d="M 210 292 L 150 292" stroke="#2f5d50" stroke-width="5"/>
+  <path d="M 690 292 L 750 292" stroke="#2f5d50" stroke-width="5"/>
+  <text x="118" y="298" font-family="Arial, sans-serif" font-size="16" text-anchor="end" fill="#2f5d50">event</text>
+  <text x="782" y="298" font-family="Arial, sans-serif" font-size="16" fill="#2f5d50">event vers micro</text>
+  <rect x="260" y="145" width="380" height="110" rx="20" fill="#fdfdfd" stroke="#26312d" stroke-width="4"/>
+  <path d="M 285 255 L 615 255" stroke="#26312d" stroke-width="4"/>
+  <text x="450" y="205" font-family="Arial, sans-serif" font-size="21" text-anchor="middle" fill="#26312d">bouton enregistrable</text>
+  <path d="M 315 255 L 315 275" stroke="#8b4e39" stroke-width="6"/>
+  <path d="M 585 255 L 585 275" stroke="#8b4e39" stroke-width="6"/>
+  <text x="450" y="118" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#26312d">Support 3D: hauteur 8 mm, son degage</text>
+</svg>

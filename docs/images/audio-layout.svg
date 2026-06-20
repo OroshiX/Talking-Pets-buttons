@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620" role="img" aria-labelledby="title desc">
+  <title id="title">Agencement audio portable</title>
+  <desc id="desc">Deux tiles de yoga avec huit boutons, un boitier Arduino GIGA derriere, et un micro pointe vers le centre.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f5d50"/>
+    </marker>
+  </defs>
+  <rect width="980" height="620" fill="#f7f4ef"/>
+  <text x="490" y="42" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#26312d">Mur / zone hors passage animal</text>
+  <rect x="405" y="74" width="170" height="70" rx="8" fill="#26312d"/>
+  <text x="490" y="116" font-family="Arial, sans-serif" font-size="19" text-anchor="middle" fill="#ffffff">Boitier GIGA</text>
+  <line x1="490" y1="144" x2="490" y2="218" stroke="#2f5d50" stroke-width="5" marker-end="url(#arrow)"/>
+  <circle cx="490" cy="230" r="22" fill="#2f5d50"/>
+  <text x="490" y="237" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">MIC</text>
+  <path d="M 490 254 C 430 300 375 333 300 364" stroke="#2f5d50" stroke-width="3" fill="none" stroke-dasharray="8 8"/>
+  <path d="M 490 254 C 550 300 605 333 680 364" stroke="#2f5d50" stroke-width="3" fill="none" stroke-dasharray="8 8"/>
+  <rect x="120" y="270" width="360" height="260" rx="6" fill="#d9e8df" stroke="#5b7d6e" stroke-width="4"/>
+  <rect x="500" y="270" width="360" height="260" rx="6" fill="#d9e8df" stroke="#5b7d6e" stroke-width="4"/>
+  <text x="150" y="306" font-family="Arial, sans-serif" font-size="20" fill="#26312d">Tile A</text>
+  <text x="530" y="306" font-family="Arial, sans-serif" font-size="20" fill="#26312d">Tile B</text>
+  <g font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#26312d">
+    <circle cx="230" cy="360" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="230" y="367">A1</text>
+    <circle cx="370" cy="360" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="370" y="367">A2</text>
+    <circle cx="230" cy="455" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="230" y="462">A3</text>
+    <circle cx="370" cy="455" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="370" y="462">A4</text>
+    <circle cx="610" cy="360" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="610" y="367">B1</text>
+    <circle cx="750" cy="360" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="750" y="367">B2</text>
+    <circle cx="610" cy="455" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="610" y="462">B3</text>
+    <circle cx="750" cy="455" r="48" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
+    <text x="750" y="462">B4</text>
+  </g>
+  <path d="M 490 558 L 490 605" stroke="#8b4e39" stroke-width="5" marker-end="url(#arrow)"/>
+  <text x="490" y="585" font-family="Arial, sans-serif" font-size="19" text-anchor="middle" fill="#8b4e39">arrivee animal</text>
+</svg>

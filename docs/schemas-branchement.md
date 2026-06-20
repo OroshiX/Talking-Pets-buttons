@@ -52,19 +52,23 @@ borne 2 --------------------->  GND
 
 ![Support bouton](images/button-riser-section.svg)
 
-Objectif: que le son sorte du dessous du bouton au lieu d'etre absorbe par la
-tile de yoga.
+Objectif : que le bouton repose dans un cylindre creux, sur une petite
+protubérance intérieure suspendue, pendant que la zone sous le haut-parleur
+reste ouverte au lieu d'être absorbée par la tile de yoga.
 
 Le support recommande:
 
-- hauteur 8 mm;
-- trou central sous le haut-parleur;
-- 3 a 4 events lateraux;
-- un event plus large oriente vers le micro;
-- levre basse pour eviter que le bouton glisse;
+- parois droites;
+- cylindre creux simple, sans plancher central ;
+- protubérance intérieure à 7 mm de haut environ ;
+- protubérance de quelques millimètres d'épaisseur et de profondeur ;
+- cette protubérance ne descend pas jusqu'en bas du cylindre ;
+- chambre centrale ouverte sous le haut-parleur ;
+- 3 a 4 évents latéraux connectés à cette chambre d'air ;
+- un évent plus large orienté vers le micro ;
 - Velcro ou patins caoutchouc dessous.
 
-Le fichier pret pour PrusaSlicer est:
+Le fichier prêt pour PrusaSlicer est :
 
 ```text
 hardware/button-riser.stl

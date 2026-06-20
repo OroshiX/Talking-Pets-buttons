@@ -36,14 +36,16 @@ Animal arrive plutot par le bas / cote ouvert.
 
 ## Orientation des boutons
 
-Chaque bouton doit être dans un support imprime. L'évent le plus large du
-support est orienté vers le micro.
+Chaque bouton doit être posé dans un support imprimé. Il repose sur une petite
+protubérance intérieure du cylindre ; cette tablette ne descend pas jusqu'en
+bas, donc la chambre centrale reste ouverte sous le haut-parleur. L'évent le
+plus large du support est orienté vers le micro.
 
 ```text
 Micro
   ^
   |
-  |       event large du support
+  |       évent large du support
   |              ^
   |              |
 +---+        +--------+

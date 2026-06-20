@@ -58,15 +58,16 @@ bon objectif.
 
 ## 4. Placer le setup
 
-Lire `docs/agencement.md`, puis installer:
+Lire `docs/agencement.md`, puis installer :
 
-- le GIGA derriere les tiles, hors zone de pattes;
-- le micro a 25-35 cm de haut, pointe vers le centre des boutons;
-- les boutons dans leurs supports 3D, event sonore oriente vers le micro.
+- le GIGA derriere les tiles, hors zone de pattes ;
+- le micro a 25-35 cm de haut, pointe vers le centre des boutons ;
+- les boutons posés dans leurs supports 3D, avec l'évent le plus large orienté
+  vers le micro.
 
 ## 5. Calibrer les boutons
 
-Pour chaque slot:
+Pour chaque slot :
 
 ```text
 cal A1 12
@@ -74,7 +75,7 @@ cal A1 12
 
 Presser ensuite le bouton A1 12 fois, depuis sa vraie position sur la tile.
 
-Repeter:
+Répéter :
 
 ```text
 cal A2 12
@@ -84,7 +85,7 @@ cal B1 12
 cal B2 12
 ```
 
-Le GIGA cree les fichiers:
+Le GIGA crée les fichiers :
 
 ```text
 /templates/A1.tpl
@@ -102,5 +103,5 @@ list
 testntfy
 ```
 
-Puis presser chaque bouton 20 fois en conditions reelles. La checklist complete
+Puis presser chaque bouton 20 fois en conditions réelles. La checklist complete
 est dans `docs/tests.md`.

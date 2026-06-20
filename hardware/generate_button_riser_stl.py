@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a PrusaSlicer-ready STL for the pet button sound riser."""
+"""Generate a PrusaSlicer-ready STL for the cylindrical pet button riser."""
 
 import math
 import struct
@@ -9,19 +9,21 @@ from pathlib import Path
 BUTTON_DIAMETER = 88.0
 INNER_CLEARANCE = 1.0
 OUTER_WALL = 4.0
-RISER_HEIGHT = 8.0
-FLOOR_THICKNESS = 2.0
-LIP_HEIGHT = 3.0
-SPEAKER_HOLE_DIAMETER = 38.0
+TOTAL_HEIGHT = 11.0
+LEDGE_TOP_HEIGHT = 7.0
+LEDGE_THICKNESS = 2.0
+LEDGE_DEPTH = 5.0
 SIDE_VENT_WIDTH = 28.0
 FRONT_VENT_MULTIPLIER = 1.35
+SIDE_VENT_BOTTOM = 1.0
+SIDE_VENT_HEIGHT = 4.0
 SEGMENTS = 192
 
 INNER_RADIUS = (BUTTON_DIAMETER + INNER_CLEARANCE) / 2.0
 OUTER_RADIUS = INNER_RADIUS + OUTER_WALL
-HOLE_RADIUS = SPEAKER_HOLE_DIAMETER / 2.0
-VENT_TOP_Z = FLOOR_THICKNESS + 4.0
-TOTAL_HEIGHT = RISER_HEIGHT + LIP_HEIGHT
+LEDGE_INNER_RADIUS = INNER_RADIUS - LEDGE_DEPTH
+LEDGE_BOTTOM_HEIGHT = LEDGE_TOP_HEIGHT - LEDGE_THICKNESS
+VENT_TOP_Z = SIDE_VENT_BOTTOM + SIDE_VENT_HEIGHT
 
 
 triangles = []
@@ -52,7 +54,7 @@ def point(radius, theta, z):
     return (radius * math.cos(theta), radius * math.sin(theta), z)
 
 
-def is_gap(theta):
+def is_vent_gap(theta):
     theta = theta % (2.0 * math.pi)
     vents = [
         (0.0, SIDE_VENT_WIDTH * FRONT_VENT_MULTIPLIER),
@@ -85,6 +87,8 @@ def add_horizontal_ring(inner_r, outer_r, z, include_segment, upward=True):
 
 
 def add_cylinder(radius, z0, z1, include_segment, outward=True):
+    if z1 <= z0:
+        return
     for i in range(SEGMENTS):
         t0 = 2.0 * math.pi * i / SEGMENTS
         t1 = 2.0 * math.pi * (i + 1) / SEGMENTS
@@ -113,16 +117,16 @@ def add_radial_cap(theta, inner_r, outer_r, z0, z1, reverse=False):
 
 def add_sector_caps(inner_r, outer_r, z0, z1):
     for i in range(SEGMENTS):
+        mid = 2.0 * math.pi * (i + 0.5) / SEGMENTS
+        if is_vent_gap(mid):
+            continue
         t0 = 2.0 * math.pi * i / SEGMENTS
         t1 = 2.0 * math.pi * (i + 1) / SEGMENTS
-        mid = (t0 + t1) / 2.0
-        if is_gap(mid):
-            continue
         prev_mid = 2.0 * math.pi * (i - 0.5) / SEGMENTS
         next_mid = 2.0 * math.pi * (i + 1.5) / SEGMENTS
-        if is_gap(prev_mid):
+        if is_vent_gap(prev_mid):
             add_radial_cap(t0, inner_r, outer_r, z0, z1, reverse=True)
-        if is_gap(next_mid):
+        if is_vent_gap(next_mid):
             add_radial_cap(t1, inner_r, outer_r, z0, z1, reverse=False)
 
 
@@ -137,26 +141,31 @@ def add_tri_prism(points_xy, z0, z1):
 
 
 full = lambda _theta: True
-gap_only = lambda theta: is_gap(theta)
-solid_only = lambda theta: not is_gap(theta)
+vent_only = lambda theta: is_vent_gap(theta)
+solid_only = lambda theta: not is_vent_gap(theta)
 
-# Floor plate with central speaker hole.
-add_horizontal_ring(HOLE_RADIUS, OUTER_RADIUS, 0.0, full, upward=False)
-add_horizontal_ring(HOLE_RADIUS, INNER_RADIUS, FLOOR_THICKNESS, full, upward=True)
-add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, FLOOR_THICKNESS, gap_only, upward=True)
-add_cylinder(OUTER_RADIUS, 0.0, FLOOR_THICKNESS, full, outward=True)
-add_cylinder(HOLE_RADIUS, 0.0, FLOOR_THICKNESS, full, outward=False)
+# Simple hollow cylindrical wall with lower acoustic vents.
+add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, 0.0, full, upward=False)
+add_cylinder(OUTER_RADIUS, 0.0, SIDE_VENT_BOTTOM, full, outward=True)
+add_cylinder(INNER_RADIUS, 0.0, SIDE_VENT_BOTTOM, full, outward=False)
+add_cylinder(OUTER_RADIUS, SIDE_VENT_BOTTOM, VENT_TOP_Z, solid_only, outward=True)
+add_cylinder(INNER_RADIUS, SIDE_VENT_BOTTOM, VENT_TOP_Z, solid_only, outward=False)
+add_sector_caps(INNER_RADIUS, OUTER_RADIUS, SIDE_VENT_BOTTOM, VENT_TOP_Z)
+add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, SIDE_VENT_BOTTOM, vent_only, upward=True)
+add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, VENT_TOP_Z, vent_only, upward=False)
 
-# Lower wall, interrupted by acoustic vents.
-add_cylinder(OUTER_RADIUS, FLOOR_THICKNESS, VENT_TOP_Z, solid_only, outward=True)
-add_cylinder(INNER_RADIUS, FLOOR_THICKNESS, VENT_TOP_Z, solid_only, outward=False)
-add_sector_caps(INNER_RADIUS, OUTER_RADIUS, FLOOR_THICKNESS, VENT_TOP_Z)
-
-# Continuous upper lip and vent ceilings.
+# Inner wall is interrupted where the shelf attaches, so no hidden full-height
+# ledge is created.
 add_cylinder(OUTER_RADIUS, VENT_TOP_Z, TOTAL_HEIGHT, full, outward=True)
-add_cylinder(INNER_RADIUS, VENT_TOP_Z, TOTAL_HEIGHT, full, outward=False)
-add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, VENT_TOP_Z, gap_only, upward=False)
+add_cylinder(INNER_RADIUS, VENT_TOP_Z, LEDGE_BOTTOM_HEIGHT, full, outward=False)
+add_cylinder(INNER_RADIUS, LEDGE_TOP_HEIGHT, TOTAL_HEIGHT, full, outward=False)
 add_horizontal_ring(INNER_RADIUS, OUTER_RADIUS, TOTAL_HEIGHT, full, upward=True)
+
+# Small suspended inner shelf/protrusion. It supports the button and leaves the
+# lower chamber open.
+add_horizontal_ring(LEDGE_INNER_RADIUS, INNER_RADIUS, LEDGE_BOTTOM_HEIGHT, full, upward=False)
+add_horizontal_ring(LEDGE_INNER_RADIUS, INNER_RADIUS, LEDGE_TOP_HEIGHT, full, upward=True)
+add_cylinder(LEDGE_INNER_RADIUS, LEDGE_BOTTOM_HEIGHT, LEDGE_TOP_HEIGHT, full, outward=False)
 
 # Raised orientation arrow. Point this toward the microphone.
 arrow = [
@@ -168,7 +177,7 @@ add_tri_prism(arrow, TOTAL_HEIGHT, TOTAL_HEIGHT + 0.8)
 
 
 def write_binary_stl(path):
-    header = b"Talking Pet Buttons button-riser, units: millimeters"
+    header = b"Talking Pet Buttons cylindrical button-riser, units: millimeters"
     header = header[:80].ljust(80, b" ")
     with path.open("wb") as file:
         file.write(header)

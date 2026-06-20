@@ -18,19 +18,20 @@ flowchart LR
   E --> G["ntfy via hotspot Android"]
 ```
 
-La V1 vise 6 a 8 boutons sur 2 tiles de yoga. Chaque bouton est place dans un
-support imprime en 3D qui degage le haut-parleur et oriente un event vers le
-micro.
+La V1 vise 6 a 8 boutons sur 2 tiles de yoga. Chaque bouton est placé dans un
+support imprimé en 3D de type cylindre creux : une petite protubérance
+intérieure suspendue porte le bouton, la zone sous le haut-parleur reste
+dégagée, et les évents latéraux orientent le son vers le micro.
 
 ## Contenu du projet
 
 - `src/main.cpp`: firmware PlatformIO pour Arduino GIGA R1 WiFi.
-- `usb/config/`: exemples de fichiers a copier sur la cle USB.
-- `hardware/button-riser.stl`: support 3D pret pour PrusaSlicer.
-- `hardware/button-riser.scad`: source parametrique OpenSCAD du support.
+- `usb/config/`: exemples de fichiers à copier sur la cle USB.
+- `hardware/button-riser.stl`: support 3D prêt pour PrusaSlicer.
+- `hardware/button-riser.scad`: source paramétrique OpenSCAD du support.
 - `docs/agencement.md`: placement des tiles, du GIGA, du micro et des boutons.
 - `docs/schemas-branchement.md`: branchements micro, USB, alimentation et flux.
-- `docs/calibration.md`: apprentissage des boutons avec les commandes serie.
+- `docs/calibration.md`: apprentissage des boutons avec les commandes série.
 - `docs/cle-usb.md`: structure de la cle USB et formats des fichiers.
 - `docs/tests.md`: checklist de validation avant usage quotidien.
 - `docs/images/`: schemas SVG exportables/imprimables.
@@ -38,32 +39,32 @@ micro.
 ## Materiel V1
 
 - Arduino GIGA R1 WiFi.
-- Module micro analogique 3.3 V a gain reglable, type MAX4466.
+- Module micro analogique 3.3 V a gain réglable, type MAX4466.
 - Cle USB-A FAT32.
 - Batterie externe USB-C ou chargeur USB-C.
 - Telephone Android avec hotspot et application `ntfy`.
-- 6 a 8 boutons enregistrables independants.
+- 6 a 8 boutons enregistrables indépendants.
 - 2 tiles de yoga emboitables.
-- Supports imprimes en 3D, un par bouton.
+- Supports imprimés en 3D, un par bouton.
 
-## Demarrage rapide
+## Démarrage rapide
 
 1. Copier `usb/config/buttons.csv`, `usb/config/settings.ini` et un
-   `secrets.ini` base sur `usb/config/secrets.example.ini` a la racine d'une
+   `secrets.ini` base sur `usb/config/secrets.example.ini` à la racine d'une
    cle USB FAT32, en gardant les dossiers.
-2. Brancher le micro:
+2. Brancher le micro :
    - `VCC` vers `3V3`;
    - `GND` vers `GND`;
    - `OUT` vers `A0`.
-3. Brancher la cle USB dans le port USB-A du GIGA.
+3. Brancher la clé USB dans le port USB-A du GIGA.
 4. Alimenter le GIGA en USB-C.
-5. Compiler et televerser avec PlatformIO.
-6. Ouvrir le moniteur serie a `115200` bauds.
+5. Compiler et téléverser avec PlatformIO.
+6. Ouvrir le moniteur série a `115200` bauds.
 7. Lancer `cal A1 12`, puis presser le bouton A1 12 fois.
-8. Repeter pour chaque bouton.
+8. Répéter pour chaque bouton.
 9. Lancer `testntfy`, puis verifier l'application Android.
 
-## Commandes serie
+## Commandes série
 
 ```text
 help              affiche les commandes

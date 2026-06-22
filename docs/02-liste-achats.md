@@ -15,7 +15,7 @@ Avant de commander, vérifier :
 
 ## Électronique principale
 
-- [ ] Arduino GIGA R1 WiFi, recommandé depuis la boutique Arduino officielle :
+- [x] Arduino GIGA R1 WiFi, recommandé depuis la boutique Arduino officielle :
   https://store.arduino.cc/products/giga-r1-wifi
   - prix constaté : 77,90 € TTC ;
   - livraison France indiquée sur la boutique Arduino ;

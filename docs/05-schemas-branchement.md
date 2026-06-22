@@ -2,6 +2,32 @@
 
 ## Vue générale
 
+![Schéma de branchement global](images/global-wiring.svg)
+
+Ce schéma montre les branchements réels à faire. Le point important : les piles
+des boutons enregistrables restent dans les boutons. Elles ne servent pas à
+alimenter l'Arduino. Le GIGA est alimenté séparément par USB-C, idéalement avec
+une batterie externe ou un chargeur USB-C stable.
+
+```text
+Batterie externe USB-C 5 V
+        |
+        v
+Arduino GIGA R1 WiFi
+   | USB-A  -> clé USB FAT32
+   | 3V3    -> VCC du micro MAX4466
+   | A0     -> OUT / AO du micro MAX4466
+   | GND    -> GND du micro MAX4466
+   | Wi-Fi  -> hotspot Android -> ntfy
+   | D22    -> bouton service optionnel
+
+Boutons enregistrables
+   | piles internes
+   | aucun fil vers le GIGA
+   v
+son capté par le micro
+```
+
 ![Agencement audio](images/audio-layout.svg)
 
 ```text
@@ -15,7 +41,8 @@ Micro analogique ---- A0 / 3V3 / GND --------+
 ```
 
 Le GIGA ne touche pas aux boutons. Les boutons restent indépendants, avec leur
-pile et leur propre message enregistré.
+pile et leur propre message enregistré. La seule liaison entre les boutons et le
+GIGA est acoustique : le bouton joue son message, puis le micro le capte.
 
 ## Branchement micro
 
@@ -35,6 +62,8 @@ Règles :
 - ne jamais envoyer de `5V` sur `A0` ;
 - garder les fils courts ;
 - régler le gain pour qu'un bouton fort ne sature pas le signal.
+
+Le micro n'a pas besoin de pile séparée : il est alimenté par le `3V3` du GIGA.
 
 ## Bouton service optionnel
 

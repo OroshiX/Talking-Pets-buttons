@@ -93,7 +93,7 @@ Le support recommandé :
 - protubérance de quelques millimètres d'épaisseur et de profondeur ;
 - cette protubérance ne descend pas jusqu'en bas du cylindre ;
 - chambre centrale ouverte sous le haut-parleur ;
-- 3 a 4 évents latéraux connectés à cette chambre d'air ;
+- 3 à 4 évents latéraux connectés à cette chambre d'air ;
 - un évent plus large orienté vers le micro ;
 - Velcro ou patins caoutchouc dessous.
 

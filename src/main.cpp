@@ -324,7 +324,7 @@ bool loadButtons() {
   return loaded > 0;
 }
 
-void applyIniValue(const char *key, const char *value, bool secretsFile) {
+void applyIniValue(const char *key, const char *value, const bool secretsFile) {
   if (strcmp(key, "wifi_ssid") == 0) {
     copyText(settings.wifiSsid, sizeof(settings.wifiSsid), value);
   } else if (strcmp(key, "wifi_pass") == 0) {

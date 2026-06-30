@@ -27,6 +27,7 @@ list
 status
 reload
 select 0
+ledtest 63
 cal A1 12
 cancel
 testntfy
@@ -124,6 +125,7 @@ Commandes utiles :
 status
 list
 select 0
+ledtest 63
 testntfy
 ```
 

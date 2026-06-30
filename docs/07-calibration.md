@@ -21,6 +21,7 @@ Vérifier :
 status
 list
 select 0
+ledtest 63
 ```
 
 ## Calibrer avec le moniteur série
@@ -103,6 +104,23 @@ select 2   sélectionne le bouton n°2
 ```
 
 `select` est ignorée pendant une calibration active.
+
+Pour tester seulement le câblage des LEDs, sans changer la sélection logique,
+utiliser `ledtest N` :
+
+```text
+ledtest 0    éteint les 6 LEDs
+ledtest 1    allume seulement le bit 1, D25
+ledtest 2    allume seulement le bit 2, D26
+ledtest 4    allume seulement le bit 4, D27
+ledtest 8    allume seulement le bit 8, D28
+ledtest 16   allume seulement le bit 16, D29
+ledtest 32   allume seulement le bit 32, D30
+ledtest 63   allume les 6 LEDs
+```
+
+Après un `ledtest`, utiliser `select 0` ou `select N` pour revenir à l'affichage
+normal de la sélection.
 
 ## Calibrer tout le setup V1
 

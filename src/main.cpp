@@ -631,11 +631,15 @@ void updateStatusLed() {
   setStatusLed(calibrationActive);
 }
 
-void updateBinaryLeds() {
-  const uint8_t value = selectedButtonNumber <= kMaxPanelSelection ? selectedButtonNumber : 0;
+void writeBinaryLeds(uint8_t value) {
   for (uint8_t i = 0; i < kBinaryLedCount; i++) {
     digitalWrite(kBinaryLedPins[i], (value & (1U << i)) ? HIGH : LOW);
   }
+}
+
+void updateBinaryLeds() {
+  const uint8_t value = selectedButtonNumber <= kMaxPanelSelection ? selectedButtonNumber : 0;
+  writeBinaryLeds(value);
 }
 
 void printPanelSelection() {
@@ -1404,6 +1408,7 @@ void printHelp() {
   Serial.println("  status            show noise, Wi-Fi, USB and panel state");
   Serial.println("  reload            reload USB config and templates");
   Serial.println("  select N          set panel selection, 0 turns binary LEDs off");
+  Serial.println("  ledtest N         show raw binary value 0..63 on panel LEDs");
   Serial.println("  cal A1 [12]       learn the next N presses for slot A1");
   Serial.println("  cancel            cancel active calibration");
   Serial.println("  testntfy          send a test notification");
@@ -1467,6 +1472,40 @@ void handleSelectCommand(char *argument) {
   setPanelSelection(static_cast<uint8_t>(requested), true);
 }
 
+void handleLedTestCommand(char *argument) {
+  if (calibrationActive) {
+    Serial.println("LED test ignored: calibration active.");
+    return;
+  }
+
+  char *value = trimInPlace(argument);
+  if (value[0] == '\0') {
+    Serial.print("Usage: ledtest 0..");
+    Serial.println(kMaxPanelSelection);
+    return;
+  }
+
+  char *end = nullptr;
+  const long requested = strtol(value, &end, 10);
+  end = trimInPlace(end);
+  if (end == value || end[0] != '\0') {
+    Serial.print("Usage: ledtest 0..");
+    Serial.println(kMaxPanelSelection);
+    return;
+  }
+
+  if (requested < 0 || requested > kMaxPanelSelection) {
+    Serial.print("LED test out of range. Use 0..");
+    Serial.println(kMaxPanelSelection);
+    return;
+  }
+
+  writeBinaryLeds(static_cast<uint8_t>(requested));
+  Serial.print("LED test value: ");
+  Serial.println(requested);
+  Serial.println("Use select 0..N to restore normal panel selection.");
+}
+
 void executeSerialCommand(char *line) {
   char *command = trimInPlace(line);
   if (command[0] == '\0') {
@@ -1490,6 +1529,8 @@ void executeSerialCommand(char *line) {
     printButtonList();
   } else if (strncasecmp(command, "select ", 7) == 0) {
     handleSelectCommand(command + 7);
+  } else if (strncasecmp(command, "ledtest ", 8) == 0) {
+    handleLedTestCommand(command + 8);
   } else if (strncasecmp(command, "cal ", 4) == 0) {
     char *slot = trimInPlace(command + 4);
     char *space = strchr(slot, ' ');

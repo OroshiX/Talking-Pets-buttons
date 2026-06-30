@@ -105,6 +105,9 @@ Règles :
 
 Test du panneau physique :
 
+- envoyer `ledtest 1`, `ledtest 2`, `ledtest 4`, `ledtest 8`, `ledtest 16`,
+  puis `ledtest 32` et vérifier que chaque LED s'allume seule ;
+- envoyer `ledtest 63` et vérifier que les 6 LEDs s'allument ;
 - envoyer `select 0` depuis le moniteur série et vérifier que les LEDs
   s'éteignent ;
 - envoyer `select 1`, `select 2`, puis `select 3` et vérifier respectivement

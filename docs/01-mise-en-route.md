@@ -11,6 +11,13 @@ pio run --target upload
 
 La cible attendue est `giga_r1_m7` dans `platformio.ini`.
 
+Pour éviter de retaper la vitesse du moniteur série à chaque fois, garder aussi
+la ligne suivante dans `platformio.ini` :
+
+```ini
+monitor_speed = 115200
+```
+
 Ouvrir ensuite le moniteur série à `115200` bauds. Au démarrage, le GIGA affiche
 la liste des commandes :
 
@@ -27,6 +34,14 @@ testntfy
 Ces commandes sont à taper dans le moniteur série connecté au GIGA, pas dans le
 terminal de l'ordinateur. Elles sont l'interface de diagnostic et de calibration
 du firmware.
+
+`115200` bauds est la vitesse de communication entre l'ordinateur et le GIGA pour
+ce moniteur série. Dans Arduino IDE, choisir `115200 baud` dans le menu du
+moniteur série. Avec PlatformIO en terminal, utiliser :
+
+```sh
+pio device monitor -b 115200
+```
 
 ## 2. Préparer la clé USB
 
@@ -70,6 +85,9 @@ Lire `docs/03-agencement.md`, puis installer :
   vers le micro.
 
 ## 5. Calibrer les boutons
+
+Deux méthodes sont possibles : les commandes série ci-dessous, ou le panneau
+physique décrit dans `docs/07-calibration.md`.
 
 Pour chaque slot :
 

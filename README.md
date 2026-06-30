@@ -51,6 +51,7 @@ dégagée, et les évents latéraux orientent le son vers le micro.
 - 6 à 8 boutons enregistrables indépendants.
 - 2 tiles de yoga emboîtables.
 - Supports imprimés en 3D, un par bouton.
+- Option : panneau de calibration avec 3 boutons NO et 6 LEDs binaires.
 
 ## Démarrage rapide
 
@@ -64,7 +65,8 @@ dégagée, et les évents latéraux orientent le son vers le micro.
 3. Brancher la clé USB dans le port USB-A du GIGA.
 4. Alimenter le GIGA en USB-C.
 5. Compiler et téléverser avec PlatformIO.
-6. Ouvrir le moniteur série à `115200` bauds.
+6. Ouvrir le moniteur série à `115200` bauds, ou utiliser
+   `pio device monitor -b 115200`.
 7. Lancer `cal A1 12`, puis presser le bouton A1 12 fois.
 8. Répéter pour chaque bouton.
 9. Lancer `testntfy`, puis vérifier l'application Android.
@@ -74,12 +76,16 @@ dégagée, et les évents latéraux orientent le son vers le micro.
 ```text
 help              affiche les commandes
 list              affiche les boutons et templates chargés
-status            affiche USB, Wi-Fi, heure, bruit et seuil
+status            affiche USB, Wi-Fi, heure, bruit, sélection et calibration
 reload            recharge la config et les templates depuis la clé USB
 cal A1 [12]       apprend les prochains appuis pour le slot A1
 cancel            annule une calibration active
 testntfy          envoie une notification de test
 ```
+
+Le panneau de calibration optionnel utilise `D22` pour `CAL`, `D23` pour `+`,
+`D24` pour `-`, et `D25` à `D30` pour les 6 LEDs binaires. L'état `000000`
+signifie qu'aucun bouton animal n'est sélectionné.
 
 ## Important
 

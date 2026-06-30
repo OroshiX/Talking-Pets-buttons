@@ -19,7 +19,10 @@ Arduino GIGA R1 WiFi
    | A0     -> OUT / AO du micro MAX4466
    | GND    -> GND du micro MAX4466
    | Wi-Fi  -> hotspot Android -> ntfy
-   | D22    -> bouton service optionnel
+   | D22    -> bouton CAL vers GND
+   | D23    -> bouton + vers GND
+   | D24    -> bouton - vers GND
+   | D25-D30 -> 6 LEDs binaires avec résistances 1 kΩ
 
 Boutons enregistrables
    | piles internes
@@ -65,17 +68,41 @@ Règles :
 
 Le micro n'a pas besoin de pile séparée : il est alimenté par le `3V3` du GIGA.
 
-## Bouton service optionnel
+## Panneau de calibration optionnel
 
-Le firmware réserve `D22` pour un bouton service futur. La V1 utilise surtout le
-moniteur série pour éviter une interface trop ambiguë.
+Le panneau de calibration permet de choisir et calibrer un bouton animal sans
+ordinateur. Les commandes série restent disponibles.
 
 ```text
-Bouton service optionnel       Arduino GIGA
+Boutons électriques NO         Arduino GIGA
 
-borne 1 --------------------->  D22
-borne 2 --------------------->  GND
+CAL borne 1 ----------------->  D22
+CAL borne 2 ----------------->  GND
+
++ borne 1 ------------------->  D23
++ borne 2 ------------------->  GND
+
+- borne 1 ------------------->  D24
+- borne 2 ------------------->  GND
 ```
+
+Ces boutons utilisent `INPUT_PULLUP`, donc aucune résistance externe n'est
+nécessaire pour eux.
+
+```text
+LEDs binaires                 Arduino GIGA
+
+bit 1  LED + résistance 1 kΩ  D25
+bit 2  LED + résistance 1 kΩ  D26
+bit 4  LED + résistance 1 kΩ  D27
+bit 8  LED + résistance 1 kΩ  D28
+bit 16 LED + résistance 1 kΩ  D29
+bit 32 LED + résistance 1 kΩ  D30
+```
+
+Ordre de lecture recommandé de gauche à droite : `32 16 8 4 2 1`, donc
+`D30 D29 D28 D27 D26 D25`. L'état `000000` signifie qu'aucun bouton animal n'est
+sélectionné.
 
 ## Support audio du bouton
 

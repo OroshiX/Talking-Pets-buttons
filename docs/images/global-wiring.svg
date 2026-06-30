@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" role="img" aria-labelledby="title desc">
   <title id="title">Schéma de branchement global</title>
-  <desc id="desc">Arduino GIGA alimenté par batterie USB-C, module micro analogique sur 3V3 GND A0, clé USB sur USB-A, téléphone Android en Wi-Fi et boutons enregistrables autonomes avec leurs piles internes.</desc>
+  <desc id="desc">Arduino GIGA alimenté par batterie USB-C, module micro analogique sur 3V3 GND A0, clé USB sur USB-A, téléphone Android en Wi-Fi, panneau de calibration sur D22 à D30 et boutons enregistrables autonomes avec leurs piles internes.</desc>
   <defs>
     <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f5d50"/>
@@ -28,7 +28,7 @@
     <text x="485" y="430">A0</text>
     <text x="485" y="470">GND</text>
     <text x="650" y="390">Wi-Fi</text>
-    <text x="625" y="470">D22 optionnel</text>
+    <text x="650" y="470">Panneau</text>
   </g>
 
   <rect x="75" y="90" width="250" height="130" rx="10" fill="#ffffff" stroke="#26312d" stroke-width="4"/>
@@ -55,9 +55,11 @@
   <text x="965" y="168" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#26312d">hotspot Wi-Fi</text>
   <text x="965" y="198" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#26312d">app ntfy</text>
 
-  <rect x="840" y="300" width="255" height="120" rx="10" fill="#ffffff" stroke="#26312d" stroke-width="4"/>
-  <text x="968" y="344" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#26312d">Bouton service</text>
-  <text x="968" y="378" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" fill="#26312d">optionnel</text>
+  <rect x="820" y="285" width="295" height="170" rx="10" fill="#ffffff" stroke="#26312d" stroke-width="4"/>
+  <text x="968" y="324" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#26312d">Panneau calibration</text>
+  <text x="968" y="356" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#26312d">CAL D22, + D23, - D24</text>
+  <text x="968" y="386" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#26312d">boutons NO vers GND</text>
+  <text x="968" y="416" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#8b4e39">LEDs D25-D30 + 1 kΩ</text>
 
   <rect x="805" y="520" width="330" height="150" rx="10" fill="#ffffff" stroke="#7a6b58" stroke-width="4"/>
   <text x="970" y="560" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" fill="#26312d">Boutons enregistrables</text>
@@ -81,16 +83,18 @@
   <path d="M 745 390 C 805 330 835 250 862 205" stroke="#3267a8" stroke-width="5" fill="none" stroke-dasharray="10 8" marker-end="url(#arrow-blue)"/>
   <text x="820" y="290" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#3267a8">Wi-Fi hotspot</text>
 
-  <line x1="745" y1="468" x2="840" y2="340" stroke="#8b4e39" stroke-width="4"/>
-  <line x1="745" y1="492" x2="840" y2="392" stroke="#333333" stroke-width="4"/>
-  <text x="795" y="422" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#8b4e39">D22</text>
-  <text x="805" y="454" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#333333">GND</text>
+  <line x1="745" y1="460" x2="820" y2="350" stroke="#8b4e39" stroke-width="4"/>
+  <line x1="745" y1="480" x2="820" y2="385" stroke="#333333" stroke-width="4"/>
+  <line x1="745" y1="500" x2="820" y2="420" stroke="#c4473a" stroke-width="4"/>
+  <text x="790" y="402" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#8b4e39">D22-D24</text>
+  <text x="800" y="438" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#333333">GND</text>
+  <text x="792" y="482" font-family="Arial, sans-serif" font-size="15" text-anchor="middle" fill="#c4473a">D25-D30</text>
 
   <path d="M 805 610 C 655 704 500 715 320 650" stroke="#2f5d50" stroke-width="4" fill="none" stroke-dasharray="8 8" marker-end="url(#arrow-green)"/>
   <text x="590" y="696" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#2f5d50">son des boutons capté par le micro</text>
 
   <g font-family="Arial, sans-serif" font-size="16" fill="#26312d">
     <rect x="84" y="698" width="1012" height="38" rx="8" fill="#efe6d8" stroke="#d2c3ad" stroke-width="2"/>
-    <text x="590" y="723" text-anchor="middle">Important : le micro n'a pas de pile séparée ; les boutons ne sont pas branchés au GIGA ; la batterie externe alimente seulement l'Arduino.</text>
+    <text x="590" y="723" text-anchor="middle">Important : le micro n'a pas de pile séparée ; les boutons animaux ne sont pas branchés au GIGA ; le panneau de calibration est séparé.</text>
   </g>
 </svg>

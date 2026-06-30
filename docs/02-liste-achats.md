@@ -78,12 +78,21 @@ Avant de commander, vérifier :
   - PLA recommandé pour un premier essai, PETG si les supports doivent mieux
     résister à la chaleur ou aux manipulations.
 
-## Option bouton service
+## Option panneau de calibration
 
-- [ ] 1 bouton poussoir normalement ouvert :
-  - ordre de prix France / UE : 1 à 5 € ;
+- [ ] 3 boutons poussoirs normalement ouverts, pour `CAL`, `+` et `-` :
+  - ordre de prix France / UE : 3 à 10 € le lot ;
   - disponible chez GoTronic, Lextronic ou dans un kit de composants Arduino.
-- [ ] 2 fils vers `D22` et `GND`.
+- [ ] 6 LEDs 3 mm ou 5 mm, couleur au choix :
+  - ordre de prix France / UE : 2 à 6 € le lot.
+- [ ] 6 résistances `1 kΩ`, une par LED :
+  - ordre de prix France / UE : 1 à 3 € le lot.
+- [ ] Fils Dupont ou câble fin pour relier le panneau au GIGA.
+- [ ] Plaque de prototypage, petit panneau percé ou boîtier imprimé.
+
+Les 3 boutons électriques n'ont pas besoin de résistances externes, car le GIGA
+utilise `INPUT_PULLUP`. Les 6 LEDs ont besoin de résistances, car elles sont
+pilotées par des sorties GPIO.
 
 ## Application Android
 

@@ -34,7 +34,18 @@ constexpr const char *kFirmwareName = "Talking Pet Buttons audio listener";
 constexpr const char *kFirmwareVersion = "1.0.0";
 
 constexpr pin_size_t kMicPin = A0;
-constexpr uint8_t kServiceButtonPin = 22;
+constexpr uint8_t kCalibrationButtonPin = 22;
+constexpr uint8_t kNextButtonPin = 23;
+constexpr uint8_t kPreviousButtonPin = 24;
+constexpr uint8_t kBinaryLedPins[] = {25, 26, 27, 28, 29, 30};
+constexpr uint8_t kBinaryLedCount = sizeof(kBinaryLedPins) / sizeof(kBinaryLedPins[0]);
+constexpr uint8_t kMaxPanelSelection = (1U << kBinaryLedCount) - 1U;
+constexpr unsigned long kPanelDebounceMs = 30;
+constexpr unsigned long kPanelLongPressMs = 1000;
+constexpr unsigned long kStatusBlinkMs = 140;
+constexpr unsigned long kStatusPulseMs = 80;
+constexpr uint8_t kStatusLedOn = LOW;
+constexpr uint8_t kStatusLedOff = HIGH;
 constexpr uint32_t kSampleRate = 16000;
 constexpr size_t kAdcBlockSamples = 128;
 constexpr size_t kAdcQueueDepth = 32;
@@ -42,7 +53,7 @@ constexpr size_t kMaxCaptureMs = 1500;
 constexpr size_t kMaxCaptureSamples = (kSampleRate * kMaxCaptureMs) / 1000;
 constexpr size_t kPreRollSamples = 1024;
 constexpr size_t kTriggerHoldSamples = 96;
-constexpr size_t kMaxButtons = 8;
+constexpr size_t kMaxButtons = kMaxPanelSelection;
 constexpr size_t kMaxPendingLine = 260;
 constexpr uint8_t kEnvelopeBins = 16;
 constexpr uint8_t kBandBins = 8;
@@ -92,6 +103,20 @@ struct MatchResult {
   int buttonIndex;
   float confidence;
   float distance;
+};
+
+struct PanelButtonState {
+  uint8_t pin;
+  bool stablePressed;
+  bool lastReadingPressed;
+  unsigned long lastReadingChangedMs;
+  unsigned long pressedSinceMs;
+  bool longHandled;
+};
+
+struct PanelButtonEvents {
+  bool shortPressed;
+  bool longPressed;
 };
 
 ButtonConfig buttons[kMaxButtons];
@@ -149,6 +174,17 @@ int calibrationButtonIndex = -1;
 uint8_t calibrationTarget = 0;
 uint8_t calibrationCount = 0;
 float calibrationAccum[kFeatureCount];
+
+uint8_t selectedButtonNumber = 0;
+PanelButtonState calibrationPanelButton = {kCalibrationButtonPin, false, false, 0, 0, false};
+PanelButtonState nextPanelButton = {kNextButtonPin, false, false, 0, 0, false};
+PanelButtonState previousPanelButton = {kPreviousButtonPin, false, false, 0, 0, false};
+
+uint8_t statusBlinkTogglesRemaining = 0;
+bool statusBlinkState = false;
+bool statusBlinkFinalOn = false;
+unsigned long statusBlinkNextToggleMs = 0;
+unsigned long statusLedPulseUntilMs = 0;
 
 char serialLine[96];
 size_t serialLineLength = 0;
@@ -531,6 +567,155 @@ int findButtonBySlot(const char *slot) {
     }
   }
   return -1;
+}
+
+size_t selectableButtonCount() {
+  return buttonCount < kMaxPanelSelection ? buttonCount : kMaxPanelSelection;
+}
+
+int selectedButtonIndex() {
+  if (selectedButtonNumber == 0 || selectedButtonNumber > selectableButtonCount()) {
+    return -1;
+  }
+  return static_cast<int>(selectedButtonNumber - 1);
+}
+
+void setStatusLed(bool on) {
+  digitalWrite(LED_BUILTIN, on ? kStatusLedOn : kStatusLedOff);
+}
+
+void stopStatusLedEffects() {
+  statusBlinkTogglesRemaining = 0;
+  statusLedPulseUntilMs = 0;
+  setStatusLed(calibrationActive);
+}
+
+void startStatusBlink(uint8_t flashes, bool finalOn) {
+  statusBlinkTogglesRemaining = flashes * 2;
+  statusBlinkState = false;
+  statusBlinkFinalOn = finalOn;
+  statusBlinkNextToggleMs = millis();
+  statusLedPulseUntilMs = 0;
+  setStatusLed(false);
+}
+
+void pulseStatusLed() {
+  if (calibrationActive && statusBlinkTogglesRemaining == 0) {
+    statusLedPulseUntilMs = millis() + kStatusPulseMs;
+  }
+}
+
+void updateStatusLed() {
+  const unsigned long now = millis();
+  if (statusBlinkTogglesRemaining > 0) {
+    if (now >= statusBlinkNextToggleMs) {
+      statusBlinkState = !statusBlinkState;
+      setStatusLed(statusBlinkState);
+      statusBlinkTogglesRemaining--;
+      statusBlinkNextToggleMs = now + kStatusBlinkMs;
+      if (statusBlinkTogglesRemaining == 0) {
+        setStatusLed(statusBlinkFinalOn);
+      }
+    }
+    return;
+  }
+
+  if (statusLedPulseUntilMs > 0) {
+    if (now < statusLedPulseUntilMs) {
+      setStatusLed(false);
+      return;
+    }
+    statusLedPulseUntilMs = 0;
+  }
+
+  setStatusLed(calibrationActive);
+}
+
+void updateBinaryLeds() {
+  const uint8_t value = selectedButtonNumber <= kMaxPanelSelection ? selectedButtonNumber : 0;
+  for (uint8_t i = 0; i < kBinaryLedCount; i++) {
+    digitalWrite(kBinaryLedPins[i], (value & (1U << i)) ? HIGH : LOW);
+  }
+}
+
+void printPanelSelection() {
+  const int index = selectedButtonIndex();
+  Serial.print("Panel selection: ");
+  if (index < 0) {
+    Serial.println("none (0)");
+    return;
+  }
+
+  Serial.print(selectedButtonNumber);
+  Serial.print(" -> ");
+  Serial.print(buttons[index].slot);
+  Serial.print(" / ");
+  Serial.println(buttons[index].word);
+}
+
+void setPanelSelection(uint8_t number, bool announce = false) {
+  const size_t maxSelection = selectableButtonCount();
+  if (number > maxSelection) {
+    number = static_cast<uint8_t>(maxSelection);
+  }
+  selectedButtonNumber = number;
+  updateBinaryLeds();
+  if (announce) {
+    printPanelSelection();
+  }
+}
+
+void syncPanelSelectionToButtonIndex(int index) {
+  if (index >= 0 && static_cast<size_t>(index) < selectableButtonCount()) {
+    setPanelSelection(static_cast<uint8_t>(index + 1));
+  } else {
+    setPanelSelection(0);
+  }
+}
+
+void clampPanelSelection() {
+  if (selectedButtonNumber > selectableButtonCount()) {
+    setPanelSelection(0);
+  } else {
+    updateBinaryLeds();
+  }
+}
+
+void stepPanelSelection(int delta) {
+  if (calibrationActive) {
+    return;
+  }
+
+  const int maxSelection = static_cast<int>(selectableButtonCount());
+  int next = static_cast<int>(selectedButtonNumber) + delta;
+  if (next < 0) {
+    next = 0;
+  } else if (next > maxSelection) {
+    next = maxSelection;
+  }
+
+  if (next != selectedButtonNumber) {
+    setPanelSelection(static_cast<uint8_t>(next), true);
+  }
+}
+
+void selectAfterCompletedCalibration(int completedIndex) {
+  const size_t maxSelection = selectableButtonCount();
+  const uint8_t next = (completedIndex >= 0 && static_cast<size_t>(completedIndex + 1) < maxSelection)
+                         ? static_cast<uint8_t>(completedIndex + 2)
+                         : 0;
+  setPanelSelection(next, true);
+}
+
+void cancelCalibration(const char *message) {
+  calibrationActive = false;
+  calibrationButtonIndex = -1;
+  calibrationTarget = 0;
+  calibrationCount = 0;
+  stopStatusLedEffects();
+  if (message != nullptr) {
+    Serial.println(message);
+  }
 }
 
 uint16_t captureTargetSamples() {
@@ -1095,8 +1280,10 @@ void handleCapturedAudio() {
     Serial.print(calibrationCount);
     Serial.print("/");
     Serial.println(calibrationTarget);
+    pulseStatusLed();
 
     if (calibrationCount >= calibrationTarget) {
+      const int completedIndex = calibrationButtonIndex;
       float average[kFeatureCount];
       for (uint8_t i = 0; i < kFeatureCount; i++) {
         average[i] = calibrationAccum[i] / calibrationCount;
@@ -1104,8 +1291,11 @@ void handleCapturedAudio() {
       saveTemplate(buttons[calibrationButtonIndex], average, calibrationCount);
       calibrationActive = false;
       calibrationButtonIndex = -1;
+      calibrationTarget = 0;
       calibrationCount = 0;
+      stopStatusLedEffects();
       Serial.println("Calibration complete.");
+      selectAfterCompletedCalibration(completedIndex);
     }
 
     resetCaptureDetector();
@@ -1195,6 +1385,8 @@ void startCalibration(const char *slot, uint8_t target) {
   calibrationTarget = target == 0 ? settings.calibrationSamples : target;
   calibrationCount = 0;
   memset(calibrationAccum, 0, sizeof(calibrationAccum));
+  syncPanelSelectionToButtonIndex(index);
+  startStatusBlink(3, true);
 
   Serial.print("Calibration armed for ");
   Serial.print(buttons[index].slot);
@@ -1209,14 +1401,19 @@ void printHelp() {
   Serial.println("Commands:");
   Serial.println("  help              show this help");
   Serial.println("  list              show buttons and template state");
-  Serial.println("  status            show noise, Wi-Fi and USB state");
+  Serial.println("  status            show noise, Wi-Fi, USB and panel state");
   Serial.println("  reload            reload USB config and templates");
   Serial.println("  cal A1 [12]       learn the next N presses for slot A1");
   Serial.println("  cancel            cancel active calibration");
   Serial.println("  testntfy          send a test notification");
+  Serial.println("Panel:");
+  Serial.println("  D22 long press    start/cancel calibration for selected button");
+  Serial.println("  D23 short press   select next button");
+  Serial.println("  D24 short press   select previous button");
 }
 
 void printStatus() {
+  const int selectedIndex = selectedButtonIndex();
   Serial.print("USB=");
   Serial.print(usbMounted && msd.connected() ? "mounted" : "missing");
   Serial.print(" WiFi=");
@@ -1227,8 +1424,16 @@ void printStatus() {
   Serial.print(noiseFloorAbs, 0);
   Serial.print(" threshold=");
   Serial.print(triggerThreshold(), 0);
+  Serial.print(" selected=");
+  Serial.print(selectedIndex >= 0 ? buttons[selectedIndex].slot : "none");
+  Serial.print(" selected_no=");
+  Serial.print(selectedButtonNumber);
   Serial.print(" calibration=");
-  Serial.println(calibrationActive ? "active" : "off");
+  Serial.print(calibrationActive ? "active" : "off");
+  Serial.print(" progress=");
+  Serial.print(calibrationActive ? calibrationCount : 0);
+  Serial.print("/");
+  Serial.println(calibrationActive ? calibrationTarget : 0);
 }
 
 void executeSerialCommand(char *line) {
@@ -1250,6 +1455,7 @@ void executeSerialCommand(char *line) {
     loadButtons();
     loadRuntimeConfig();
     loadTemplates();
+    clampPanelSelection();
     printButtonList();
   } else if (strncasecmp(command, "cal ", 4) == 0) {
     char *slot = trimInPlace(command + 4);
@@ -1264,10 +1470,7 @@ void executeSerialCommand(char *line) {
     }
     startCalibration(slot, target);
   } else if (strcasecmp(command, "cancel") == 0) {
-    calibrationActive = false;
-    calibrationButtonIndex = -1;
-    calibrationCount = 0;
-    Serial.println("Calibration cancelled.");
+    cancelCalibration("Calibration cancelled.");
   } else if (strcasecmp(command, "testntfy") == 0) {
     if (!sendNtfy("Test boutons", "Test notification Arduino GIGA")) {
       appendPendingNotification("Test boutons", "Test notification Arduino GIGA");
@@ -1293,6 +1496,76 @@ void pollSerial() {
 
     if (serialLineLength + 1 < sizeof(serialLine)) {
       serialLine[serialLineLength++] = c;
+    }
+  }
+}
+
+PanelButtonEvents pollPanelButton(PanelButtonState &button) {
+  PanelButtonEvents events = {false, false};
+  const unsigned long now = millis();
+  const bool readingPressed = digitalRead(button.pin) == LOW;
+
+  if (readingPressed != button.lastReadingPressed) {
+    button.lastReadingPressed = readingPressed;
+    button.lastReadingChangedMs = now;
+  }
+
+  if (now - button.lastReadingChangedMs >= kPanelDebounceMs &&
+      readingPressed != button.stablePressed) {
+    button.stablePressed = readingPressed;
+    if (button.stablePressed) {
+      button.pressedSinceMs = now;
+      button.longHandled = false;
+    } else {
+      if (!button.longHandled && button.pressedSinceMs > 0) {
+        events.shortPressed = true;
+      }
+      button.pressedSinceMs = 0;
+      button.longHandled = false;
+    }
+  }
+
+  if (button.stablePressed &&
+      !button.longHandled &&
+      button.pressedSinceMs > 0 &&
+      now - button.pressedSinceMs >= kPanelLongPressMs) {
+    events.longPressed = true;
+    button.longHandled = true;
+  }
+
+  return events;
+}
+
+void startPanelCalibration() {
+  const int index = selectedButtonIndex();
+  if (index < 0) {
+    Serial.println("Panel calibration ignored: selection is 0.");
+    startStatusBlink(3, false);
+    return;
+  }
+
+  startCalibration(buttons[index].slot, settings.calibrationSamples);
+}
+
+void pollControlPanel() {
+  const PanelButtonEvents calEvents = pollPanelButton(calibrationPanelButton);
+  const PanelButtonEvents nextEvents = pollPanelButton(nextPanelButton);
+  const PanelButtonEvents previousEvents = pollPanelButton(previousPanelButton);
+
+  if (calEvents.longPressed) {
+    if (calibrationActive) {
+      cancelCalibration("Calibration cancelled by panel.");
+    } else {
+      startPanelCalibration();
+    }
+  }
+
+  if (!calibrationActive) {
+    if (nextEvents.shortPressed) {
+      stepPanelSelection(1);
+    }
+    if (previousEvents.shortPressed) {
+      stepPanelSelection(-1);
     }
   }
 }
@@ -1323,7 +1596,14 @@ void setup() {
   delay(1200);
 
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(kServiceButtonPin, INPUT_PULLUP);
+  setStatusLed(false);
+  pinMode(kCalibrationButtonPin, INPUT_PULLUP);
+  pinMode(kNextButtonPin, INPUT_PULLUP);
+  pinMode(kPreviousButtonPin, INPUT_PULLUP);
+  for (uint8_t i = 0; i < kBinaryLedCount; i++) {
+    pinMode(kBinaryLedPins[i], OUTPUT);
+    digitalWrite(kBinaryLedPins[i], LOW);
+  }
 
   Serial.println();
   Serial.print(kFirmwareName);
@@ -1336,6 +1616,7 @@ void setup() {
   loadTemplates();
   printButtonList();
   printHelp();
+  clampPanelSelection();
 
   startAdc();
 }
@@ -1343,7 +1624,8 @@ void setup() {
 void loop() {
   pollAudio();
   pollSerial();
+  pollControlPanel();
   periodicNetworkWork();
   periodicStatusPrint();
-  digitalWrite(LED_BUILTIN, calibrationActive ? HIGH : LOW);
+  updateStatusLed();
 }

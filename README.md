@@ -77,9 +77,12 @@ dégagée, et les évents latéraux orientent le son vers le micro.
 help              affiche les commandes
 list              affiche les boutons et templates chargés
 status            affiche USB, Wi-Fi, heure, bruit, sélection et calibration
+usb               monte ou remonte la clé USB maintenant
 reload            recharge la config et les templates depuis la clé USB
 select N          règle la sélection du panneau ; 0 éteint les LEDs binaires
 ledtest N         affiche une valeur brute 0..63 sur les LEDs binaires
+wifi              connecte le GIGA au Wi-Fi configuré maintenant
+ntp               synchronise l'heure NTP maintenant
 cal A1 [12]       apprend les prochains appuis pour le slot A1
 cancel            annule une calibration active
 testntfy          envoie une notification de test

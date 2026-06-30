@@ -60,6 +60,8 @@ trigger_multiplier=4.0
 capture_ms=1500
 cooldown_ms=800
 calibration_samples=12
+auto_ntp=false
+auto_queue_flush=false
 ```
 
 Ces valeurs sont rechargeables avec la commande série :
@@ -67,6 +69,19 @@ Ces valeurs sont rechargeables avec la commande série :
 ```text
 reload
 ```
+
+Si `status` affiche `USB=missing`, la commande série `usb` tente de remonter la
+clé sans recharger toute la configuration. `reload` tente aussi de remonter la
+clé, puis recharge `buttons.csv`, `settings.ini`, `secrets.ini` et les templates.
+
+`auto_ntp=false` empêche la synchronisation NTP automatique au démarrage. C'est
+le mode recommandé tant que la connexion réseau est en diagnostic : le GIGA
+reste disponible dans le moniteur série, puis tu peux lancer `wifi` et `ntp`
+manuellement. Une fois le Wi-Fi/NTP validé, tu peux passer à `auto_ntp=true`.
+
+`auto_queue_flush=false` empêche l'envoi automatique de la file
+`/queue/ntfy-pending.jsonl` toutes les 30 secondes. Les notifications directes
+restent testables avec `testntfy`.
 
 ## Templates
 
@@ -103,5 +118,5 @@ Si le Wi-Fi échoue :
 /queue/ntfy-pending.jsonl
 ```
 
-Le firmware tente de vider cette file toutes les 30 secondes quand le Wi-Fi est
-disponible.
+Si `auto_queue_flush=true`, le firmware tente de vider cette file toutes les 30
+secondes quand le Wi-Fi est disponible.

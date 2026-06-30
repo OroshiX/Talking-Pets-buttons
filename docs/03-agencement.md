@@ -62,8 +62,8 @@ Pour déplacer le setup :
 3. garder le micro fixe au boîtier ou à un petit mât pliable ;
 4. brancher le GIGA à une batterie externe ;
 5. activer le hotspot Android ;
-6. attendre `Wi-Fi connected` et `NTP synced` dans le moniteur série si tu
-   vérifies depuis l'ordinateur.
+6. si tu vérifies depuis l'ordinateur, lancer `wifi` puis `ntp`, ou attendre
+   `Wi-Fi connected` et `NTP synced` si `auto_ntp=true`.
 
 Si le placement change beaucoup, lancer au minimum un test de 5 pressions par
 bouton. Si la confiance baisse nettement, refaire la calibration.

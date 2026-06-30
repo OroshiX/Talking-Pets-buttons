@@ -25,9 +25,12 @@ la liste des commandes :
 help
 list
 status
+usb
 reload
 select 0
 ledtest 63
+wifi
+ntp
 cal A1 12
 cancel
 testntfy
@@ -124,8 +127,11 @@ Commandes utiles :
 ```text
 status
 list
+usb
 select 0
 ledtest 63
+wifi
+ntp
 testntfy
 ```
 

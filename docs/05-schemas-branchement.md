@@ -156,4 +156,6 @@ Si le Wi-Fi ou le hotspot n'est pas disponible, l'événement reconnu est ajout�
 /queue/ntfy-pending.jsonl
 ```
 
-Le GIGA renvoie cette file au retour du Wi-Fi.
+Le GIGA renvoie cette file au retour du Wi-Fi si `auto_queue_flush=true`. En
+mode diagnostic, garder `auto_queue_flush=false` et tester d'abord `wifi`, `ntp`,
+puis `testntfy`.

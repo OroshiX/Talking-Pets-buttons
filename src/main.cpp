@@ -49,6 +49,7 @@ constexpr uint8_t kStatusLedOff = HIGH;
 constexpr uint32_t kSampleRate = 16000;
 constexpr size_t kAdcBlockSamples = 128;
 constexpr size_t kAdcQueueDepth = 32;
+constexpr size_t kMaxAdcBuffersPerLoop = 4;
 constexpr size_t kMaxCaptureMs = 1500;
 constexpr size_t kMaxCaptureSamples = (kSampleRate * kMaxCaptureMs) / 1000;
 constexpr size_t kPreRollSamples = 1024;
@@ -92,6 +93,8 @@ struct RuntimeSettings {
   uint16_t cooldownMs;
   uint16_t captureMs;
   uint8_t calibrationSamples;
+  bool autoNtp;
+  bool autoQueueFlush;
 };
 
 enum class CaptureState {
@@ -138,6 +141,8 @@ RuntimeSettings settings = {
   800,         // cooldownMs
   1500,        // captureMs
   12,          // calibrationSamples
+  false,       // autoNtp
+  false,       // autoQueueFlush
 };
 
 AdvancedADC adc(kMicPin);
@@ -189,6 +194,14 @@ unsigned long statusLedPulseUntilMs = 0;
 char serialLine[96];
 size_t serialLineLength = 0;
 
+bool isUsbPath(const char *path) {
+  return path != nullptr && strncmp(path, "/usb", 4) == 0;
+}
+
+bool isUsbReady() {
+  return usbMounted && msd.connected();
+}
+
 void copyText(char *dest, size_t destSize, const char *src) {
   if (destSize == 0) {
     return;
@@ -237,8 +250,13 @@ void ensureDirectories() {
 }
 
 bool mountUsbStick(uint32_t timeoutMs = 15000) {
-  if (usbMounted && msd.connected()) {
+  if (isUsbReady()) {
     return true;
+  }
+  if (usbMounted && !msd.connected()) {
+    Serial.println("USB stick disconnected; unmounting filesystem.");
+    usb.unmount();
+    usbMounted = false;
   }
 
   pinMode(PA_15, OUTPUT);
@@ -270,6 +288,10 @@ bool mountUsbStick(uint32_t timeoutMs = 15000) {
 }
 
 bool fileExists(const char *path) {
+  if (isUsbPath(path) && !isUsbReady()) {
+    return false;
+  }
+
   FILE *file = fopen(path, "r");
   if (file == nullptr) {
     return false;
@@ -303,7 +325,7 @@ void loadDefaultButtons() {
 bool loadButtons() {
   loadDefaultButtons();
 
-  if (!usbMounted) {
+  if (!mountUsbStick(1000)) {
     Serial.println("Using compiled default buttons: USB not mounted.");
     return false;
   }
@@ -395,11 +417,15 @@ void applyIniValue(const char *key, const char *value, const bool secretsFile) {
     if (requested >= 3 && requested <= 30) {
       settings.calibrationSamples = static_cast<uint8_t>(requested);
     }
+  } else if (strcmp(key, "auto_ntp") == 0 && !secretsFile) {
+    settings.autoNtp = parseBoolValue(value, false);
+  } else if (strcmp(key, "auto_queue_flush") == 0 && !secretsFile) {
+    settings.autoQueueFlush = parseBoolValue(value, false);
   }
 }
 
 bool loadIniFile(const char *path, bool secretsFile) {
-  if (!usbMounted) {
+  if (!mountUsbStick(1000)) {
     return false;
   }
 
@@ -443,6 +469,10 @@ void loadRuntimeConfig() {
   Serial.println(settings.captureMs);
   Serial.print("Confidence threshold: ");
   Serial.println(settings.confidenceThreshold, 2);
+  Serial.print("Auto NTP: ");
+  Serial.println(settings.autoNtp ? "on" : "off");
+  Serial.print("Auto queue flush: ");
+  Serial.println(settings.autoQueueFlush ? "on" : "off");
 }
 
 void templatePathForButton(const ButtonConfig &button, char *path, size_t pathSize) {
@@ -461,7 +491,7 @@ bool parseFeaturesLine(char *value, float *features) {
 }
 
 bool loadTemplate(ButtonConfig &button) {
-  if (!usbMounted) {
+  if (!isUsbReady()) {
     return false;
   }
 
@@ -511,7 +541,7 @@ void loadTemplates() {
 }
 
 bool saveTemplate(ButtonConfig &button, const float *features, uint16_t sampleCount) {
-  if (!usbMounted && !mountUsbStick(3000)) {
+  if (!mountUsbStick(3000)) {
     return false;
   }
 
@@ -927,7 +957,7 @@ void appendLog(const char *slot,
                uint16_t durationMs,
                uint16_t noiseFloor,
                bool notified) {
-  if (!usbMounted && !mountUsbStick(1000)) {
+  if (!mountUsbStick(1000)) {
     Serial.println("Log skipped: USB unavailable.");
     return;
   }
@@ -975,10 +1005,12 @@ void writeJsonString(FILE *file, const char *value) {
 }
 
 bool appendPendingNotification(const char *title, const char *message) {
-  if (!usbMounted && !mountUsbStick(1000)) {
+  if (!mountUsbStick(1000)) {
+    Serial.println("Pending ntfy skipped: USB unavailable.");
     return false;
   }
 
+  Serial.println("Queueing pending ntfy event.");
   FILE *file = fopen(kPendingPath, "a");
   if (file == nullptr) {
     Serial.println("Cannot append pending ntfy event.");
@@ -991,6 +1023,7 @@ bool appendPendingNotification(const char *title, const char *message) {
   writeJsonString(file, message);
   fputs("}\n", file);
   fclose(file);
+  Serial.println("Pending ntfy event queued.");
   return true;
 }
 
@@ -1041,10 +1074,19 @@ bool ensureWifiConnected(uint32_t minRetryMs = 15000) {
 
   Serial.print("Connecting Wi-Fi SSID: ");
   Serial.println(settings.wifiSsid);
+  Serial.println("Wi-Fi: begin");
+  Serial.flush();
   const int status = WiFi.begin(settings.wifiSsid, settings.wifiPass);
+  Serial.print("Wi-Fi: begin returned=");
+  Serial.println(status);
   delay(2500);
+  const int currentStatus = WiFi.status();
+  Serial.print("Wi-Fi: status after wait=");
+  Serial.println(currentStatus);
 
-  if (status == WL_CONNECTED || WiFi.status() == WL_CONNECTED) {
+  if (status == WL_CONNECTED || currentStatus == WL_CONNECTED) {
+    Serial.println("Wi-Fi: reading local IP");
+    Serial.flush();
     Serial.print("Wi-Fi connected, IP=");
     Serial.println(WiFi.localIP());
     return true;
@@ -1056,10 +1098,21 @@ bool ensureWifiConnected(uint32_t minRetryMs = 15000) {
 
 template <typename TClient>
 bool postNtfyWithClient(TClient &client, uint16_t port, const char *title, const char *message) {
+  client.setSocketTimeout(5000);
+  Serial.print("ntfy connect: ");
+  Serial.print(settings.ntfyTls ? "https://" : "http://");
+  Serial.print(settings.ntfyHost);
+  Serial.print(":");
+  Serial.println(port);
+  Serial.flush();
+
   if (!client.connect(settings.ntfyHost, port)) {
+    Serial.println("ntfy connect failed.");
+    client.stop();
     return false;
   }
 
+  Serial.println("ntfy connected, sending request.");
   const size_t bodyLength = strlen(message);
   client.print("POST /");
   client.print(settings.ntfyTopic);
@@ -1089,6 +1142,8 @@ bool postNtfyWithClient(TClient &client, uint16_t port, const char *title, const
       if (c == '\n') {
         statusLine[idx] = '\0';
         client.stop();
+        Serial.print("ntfy status: ");
+        Serial.println(statusLine);
         return strstr(statusLine, " 2") != nullptr;
       }
       if (c != '\r' && idx + 1 < sizeof(statusLine)) {
@@ -1098,6 +1153,7 @@ bool postNtfyWithClient(TClient &client, uint16_t port, const char *title, const
   }
 
   client.stop();
+  Serial.println("ntfy response timeout.");
   return false;
 }
 
@@ -1121,7 +1177,7 @@ bool sendNtfy(const char *title, const char *message) {
 }
 
 void flushPendingNotifications() {
-  if (!usbMounted || !fileExists(kPendingPath)) {
+  if (!mountUsbStick(1000) || !fileExists(kPendingPath)) {
     return;
   }
   if (!ensureWifiConnected()) {
@@ -1175,6 +1231,8 @@ bool syncTimeWithNtp() {
   }
 
   if (!ntpStarted) {
+    Serial.println("NTP: starting UDP on local port 2390");
+    Serial.flush();
     ntpUdp.begin(2390);
     ntpStarted = true;
   }
@@ -1189,9 +1247,24 @@ bool syncTimeWithNtp() {
   packet[14] = 49;
   packet[15] = 52;
 
-  ntpUdp.beginPacket(settings.ntpHost, 123);
+  Serial.print("NTP: sending request to ");
+  Serial.println(settings.ntpHost);
+  Serial.flush();
+  const int packetStarted = ntpUdp.beginPacket(settings.ntpHost, 123);
+  Serial.print("NTP: beginPacket=");
+  Serial.println(packetStarted);
+  if (packetStarted == 0) {
+    Serial.println("NTP sync failed: beginPacket returned 0.");
+    return false;
+  }
   ntpUdp.write(packet, sizeof(packet));
-  ntpUdp.endPacket();
+  const int packetSent = ntpUdp.endPacket();
+  Serial.print("NTP: endPacket=");
+  Serial.println(packetSent);
+  if (packetSent == 0) {
+    Serial.println("NTP sync failed: endPacket returned 0.");
+    return false;
+  }
 
   const unsigned long deadline = millis() + 1600;
   while (millis() < deadline) {
@@ -1351,12 +1424,14 @@ void processSample(uint16_t sample) {
 }
 
 void pollAudio() {
-  while (adc.available()) {
+  size_t processedBuffers = 0;
+  while (adc.available() && processedBuffers < kMaxAdcBuffersPerLoop) {
     SampleBuffer buffer = adc.read();
     for (size_t i = 0; i < buffer.size(); i++) {
       processSample(buffer[i]);
     }
     buffer.release();
+    processedBuffers++;
   }
 }
 
@@ -1406,9 +1481,12 @@ void printHelp() {
   Serial.println("  help              show this help");
   Serial.println("  list              show buttons and template state");
   Serial.println("  status            show noise, Wi-Fi, USB and panel state");
+  Serial.println("  usb               mount or remount the USB stick now");
   Serial.println("  reload            reload USB config and templates");
   Serial.println("  select N          set panel selection, 0 turns binary LEDs off");
   Serial.println("  ledtest N         show raw binary value 0..63 on panel LEDs");
+  Serial.println("  wifi              connect to configured Wi-Fi now");
+  Serial.println("  ntp               sync time with NTP now");
   Serial.println("  cal A1 [12]       learn the next N presses for slot A1");
   Serial.println("  cancel            cancel active calibration");
   Serial.println("  testntfy          send a test notification");
@@ -1421,7 +1499,7 @@ void printHelp() {
 void printStatus() {
   const int selectedIndex = selectedButtonIndex();
   Serial.print("USB=");
-  Serial.print(usbMounted && msd.connected() ? "mounted" : "missing");
+  Serial.print(isUsbReady() ? "mounted" : "missing");
   Serial.print(" WiFi=");
   Serial.print(WiFi.status() == WL_CONNECTED ? "connected" : "offline");
   Serial.print(" time=");
@@ -1439,7 +1517,11 @@ void printStatus() {
   Serial.print(" progress=");
   Serial.print(calibrationActive ? calibrationCount : 0);
   Serial.print("/");
-  Serial.println(calibrationActive ? calibrationTarget : 0);
+  Serial.print(calibrationActive ? calibrationTarget : 0);
+  Serial.print(" auto_ntp=");
+  Serial.print(settings.autoNtp ? "on" : "off");
+  Serial.print(" auto_queue=");
+  Serial.println(settings.autoQueueFlush ? "on" : "off");
 }
 
 void handleSelectCommand(char *argument) {
@@ -1506,6 +1588,29 @@ void handleLedTestCommand(char *argument) {
   Serial.println("Use select 0..N to restore normal panel selection.");
 }
 
+void handleWifiCommand() {
+  const bool connected = ensureWifiConnected(0);
+  Serial.print("Wi-Fi manual connect: ");
+  Serial.println(connected ? "connected" : "failed");
+}
+
+void handleNtpCommand() {
+  if (timeSynced) {
+    Serial.println("NTP already synced.");
+    return;
+  }
+
+  const bool synced = syncTimeWithNtp();
+  Serial.print("NTP manual sync: ");
+  Serial.println(synced ? "synced" : "failed");
+}
+
+void handleUsbCommand() {
+  const bool mounted = mountUsbStick(5000);
+  Serial.print("USB manual mount: ");
+  Serial.println(mounted ? "mounted" : "missing");
+}
+
 void executeSerialCommand(char *line) {
   char *command = trimInPlace(line);
   if (command[0] == '\0') {
@@ -1518,10 +1623,10 @@ void executeSerialCommand(char *line) {
     printButtonList();
   } else if (strcasecmp(command, "status") == 0) {
     printStatus();
+  } else if (strcasecmp(command, "usb") == 0) {
+    handleUsbCommand();
   } else if (strcasecmp(command, "reload") == 0) {
-    if (!usbMounted) {
-      mountUsbStick(5000);
-    }
+    mountUsbStick(5000);
     loadButtons();
     loadRuntimeConfig();
     loadTemplates();
@@ -1531,6 +1636,10 @@ void executeSerialCommand(char *line) {
     handleSelectCommand(command + 7);
   } else if (strncasecmp(command, "ledtest ", 8) == 0) {
     handleLedTestCommand(command + 8);
+  } else if (strcasecmp(command, "wifi") == 0) {
+    handleWifiCommand();
+  } else if (strcasecmp(command, "ntp") == 0) {
+    handleNtpCommand();
   } else if (strncasecmp(command, "cal ", 4) == 0) {
     char *slot = trimInPlace(command + 4);
     char *space = strchr(slot, ' ');
@@ -1646,10 +1755,10 @@ void pollControlPanel() {
 
 void periodicNetworkWork() {
   const unsigned long now = millis();
-  if (!timeSynced && now > 5000) {
+  if (settings.autoNtp && !timeSynced && now > 5000) {
     syncTimeWithNtp();
   }
-  if (now - lastQueueFlushMs > 30000UL) {
+  if (settings.autoQueueFlush && now - lastQueueFlushMs > 30000UL) {
     lastQueueFlushMs = now;
     flushPendingNotifications();
   }

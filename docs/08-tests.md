@@ -34,7 +34,7 @@ bonne vitesse.
 La commande `status` affiche une ligne de diagnostic du firmware, par exemple :
 
 ```text
-USB=mounted WiFi=connected time=synced noise=142 threshold=650 selected=A1 selected_no=1 calibration=active progress=3/12
+USB=mounted WiFi=connected time=synced noise=142 threshold=650 selected=A1 selected_no=1 calibration=active progress=3/12 auto_ntp=off auto_queue=off
 ```
 
 Signification :
@@ -46,7 +46,45 @@ Signification :
 - `threshold=650` : seuil au-dessus duquel un son déclenche une capture ;
 - `selected=A1 selected_no=1` : bouton animal actuellement sélectionné ;
 - `calibration=active progress=3/12` : calibration en cours, 3 exemples captés
-  sur 12.
+  sur 12 ;
+- `auto_ntp=off` : le firmware ne lance pas NTP automatiquement au démarrage ;
+- `auto_queue=off` : le firmware ne vide pas automatiquement la file `ntfy`.
+
+## 0.1. Test diagnostic Wi-Fi/NTP
+
+Si le GIGA ne répond plus aux commandes série dès que le Wi-Fi se connecte,
+garder ces lignes dans `/config/settings.ini` :
+
+```ini
+auto_ntp=false
+auto_queue_flush=false
+```
+
+Après un reset, tester dans cet ordre :
+
+```text
+status
+wifi
+status
+usb
+status
+ntp
+status
+```
+
+Interprétation :
+
+- si `status` répond après le reset, la liaison série fonctionne ;
+- si `USB=missing` apparaît après le Wi-Fi, lancer `usb` pour tenter un remontage
+  manuel de la clé ;
+- si la carte clignote rouge ou ne répond plus pendant `wifi`, noter la dernière
+  ligne affichée entre `Wi-Fi: begin`, `Wi-Fi: begin returned`, `Wi-Fi: status
+  after wait` et `Wi-Fi: reading local IP` ;
+- si `wifi` fonctionne mais que la carte clignote rouge ou ne répond plus
+  pendant `ntp`, noter la dernière ligne affichée entre `NTP: starting UDP`,
+  `NTP: sending request`, `NTP: beginPacket` et `NTP: endPacket` ;
+- une fois le diagnostic stable, repasser à `auto_ntp=true` seulement si le test
+  `ntp` manuel ne bloque pas la carte.
 
 ## 1. Test micro
 

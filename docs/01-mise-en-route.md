@@ -24,6 +24,10 @@ cancel
 testntfy
 ```
 
+Ces commandes sont à taper dans le moniteur série connecté au GIGA, pas dans le
+terminal de l'ordinateur. Elles sont l'interface de diagnostic et de calibration
+du firmware.
+
 ## 2. Préparer la clé USB
 
 Formater une clé USB-A en FAT32, puis copier la structure suivante :

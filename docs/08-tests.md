@@ -1,8 +1,47 @@
 # Plan de tests
 
+## 0. Préparer le banc de test
+
+Les commandes comme `status`, `list`, `cal A1 12` ou `testntfy` ne sont pas des
+commandes à lancer dans le terminal de l'ordinateur. Ce sont des commandes série
+à envoyer au firmware qui tourne sur l'Arduino GIGA.
+
+Pour les lancer :
+
+1. brancher le GIGA à l'ordinateur en USB-C ;
+2. brancher la clé USB FAT32 sur le port USB-A du GIGA ;
+3. brancher le micro MAX4466 au GIGA : `VCC` vers `3V3`, `OUT` vers `A0`,
+   `GND` vers `GND` ;
+4. placer les boutons à leur position réelle sur les tiles ;
+5. activer le hotspot Android si le test concerne le Wi-Fi, l'heure ou `ntfy` ;
+6. ouvrir le moniteur série PlatformIO, Arduino IDE, CLion ou VS Code à
+   `115200` bauds ;
+7. taper la commande dans le champ d'envoi du moniteur série, puis appuyer sur
+   Entrée.
+
+Si le GIGA est seulement branché à une batterie externe, il fonctionne, mais tu
+ne peux pas taper `status` sans liaison série avec l'ordinateur. Pour les tests,
+le plus simple est donc d'alimenter le GIGA depuis l'ordinateur en USB-C, puis de
+passer sur batterie externe seulement pour le test de portabilité.
+
+La commande `status` affiche une ligne de diagnostic du firmware, par exemple :
+
+```text
+USB=mounted WiFi=connected time=synced noise=142 threshold=650 calibration=off
+```
+
+Signification :
+
+- `USB=mounted` : la clé USB est détectée et montée ;
+- `WiFi=connected` : le GIGA est connecté au hotspot Android ;
+- `time=synced` : l'heure a été récupérée par NTP ;
+- `noise=142` : niveau de bruit de fond mesuré par le micro ;
+- `threshold=650` : seuil au-dessus duquel un son déclenche une capture ;
+- `calibration=off` : aucune calibration n'est en cours.
+
 ## 1. Test micro
 
-Commande :
+Depuis le moniteur série, envoyer :
 
 ```text
 status
@@ -91,7 +130,7 @@ Séquence :
 2. déplacer tiles, boutons, micro et boîtier ;
 3. rallumer sur batterie externe ;
 4. activer le hotspot Android ;
-5. vérifier `status` ;
+5. si un ordinateur est branché temporairement en USB-C, vérifier `status` ;
 6. presser chaque bouton.
 
 Attendu :
@@ -100,6 +139,9 @@ Attendu :
 - l'heure NTP se synchronise ;
 - les logs vont dans `/logs/YYYY-MM-DD.csv` ;
 - les notifications arrivent sur Android.
+
+Sans ordinateur branché, ce test se valide surtout par les notifications Android
+et par les fichiers de log créés sur la clé USB après extinction propre du GIGA.
 
 ## 7. Offline
 

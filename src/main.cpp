@@ -1403,6 +1403,7 @@ void printHelp() {
   Serial.println("  list              show buttons and template state");
   Serial.println("  status            show noise, Wi-Fi, USB and panel state");
   Serial.println("  reload            reload USB config and templates");
+  Serial.println("  select N          set panel selection, 0 turns binary LEDs off");
   Serial.println("  cal A1 [12]       learn the next N presses for slot A1");
   Serial.println("  cancel            cancel active calibration");
   Serial.println("  testntfy          send a test notification");
@@ -1436,6 +1437,36 @@ void printStatus() {
   Serial.println(calibrationActive ? calibrationTarget : 0);
 }
 
+void handleSelectCommand(char *argument) {
+  if (calibrationActive) {
+    Serial.println("Select ignored: calibration active.");
+    return;
+  }
+
+  char *value = trimInPlace(argument);
+  if (value[0] == '\0') {
+    Serial.println("Usage: select 0..N");
+    return;
+  }
+
+  char *end = nullptr;
+  const long requested = strtol(value, &end, 10);
+  end = trimInPlace(end);
+  if (end == value || end[0] != '\0') {
+    Serial.println("Usage: select 0..N");
+    return;
+  }
+
+  const size_t maxSelection = selectableButtonCount();
+  if (requested < 0 || requested > static_cast<long>(maxSelection)) {
+    Serial.print("Select out of range. Use 0..");
+    Serial.println(maxSelection);
+    return;
+  }
+
+  setPanelSelection(static_cast<uint8_t>(requested), true);
+}
+
 void executeSerialCommand(char *line) {
   char *command = trimInPlace(line);
   if (command[0] == '\0') {
@@ -1457,6 +1488,8 @@ void executeSerialCommand(char *line) {
     loadTemplates();
     clampPanelSelection();
     printButtonList();
+  } else if (strncasecmp(command, "select ", 7) == 0) {
+    handleSelectCommand(command + 7);
   } else if (strncasecmp(command, "cal ", 4) == 0) {
     char *slot = trimInPlace(command + 4);
     char *space = strchr(slot, ' ');

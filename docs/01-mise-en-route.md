@@ -26,6 +26,7 @@ help
 list
 status
 reload
+select 0
 cal A1 12
 cancel
 testntfy
@@ -122,6 +123,7 @@ Commandes utiles :
 ```text
 status
 list
+select 0
 testntfy
 ```
 

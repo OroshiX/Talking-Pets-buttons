@@ -105,6 +105,10 @@ Règles :
 
 Test du panneau physique :
 
+- envoyer `select 0` depuis le moniteur série et vérifier que les LEDs
+  s'éteignent ;
+- envoyer `select 1`, `select 2`, puis `select 3` et vérifier respectivement
+  `000001`, `000010`, puis `000011` ;
 - utiliser `+` et `-` pour parcourir `0..N` sans boucle automatique ;
 - vérifier que `0` éteint les 6 LEDs binaires ;
 - vérifier que `000001` correspond au bouton n°1 de `buttons.csv` ;

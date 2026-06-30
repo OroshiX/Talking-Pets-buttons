@@ -20,6 +20,7 @@ Vérifier :
 ```text
 status
 list
+select 0
 ```
 
 ## Calibrer avec le moniteur série
@@ -92,6 +93,16 @@ indiquer l'erreur.
 
 Pendant une calibration active, `+` et `-` sont ignorés pour ne pas mélanger les
 exemples audio de deux boutons. Pour annuler, refaire un appui long sur `CAL`.
+
+Depuis le moniteur série, la commande `select N` règle la même sélection :
+
+```text
+select 0   éteint les 6 LEDs binaires
+select 1   sélectionne le bouton n°1
+select 2   sélectionne le bouton n°2
+```
+
+`select` est ignorée pendant une calibration active.
 
 ## Calibrer tout le setup V1
 

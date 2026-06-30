@@ -78,6 +78,7 @@ help              affiche les commandes
 list              affiche les boutons et templates chargés
 status            affiche USB, Wi-Fi, heure, bruit, sélection et calibration
 reload            recharge la config et les templates depuis la clé USB
+select N          règle la sélection du panneau; 0 éteint les LEDs binaires
 cal A1 [12]       apprend les prochains appuis pour le slot A1
 cancel            annule une calibration active
 testntfy          envoie une notification de test
